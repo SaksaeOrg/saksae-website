@@ -62,7 +62,6 @@
       "devDependencies": {
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "@craco/craco": "^7.1.0",
-        "@emergentbase/visual-edits": "https://assets.emergent.sh/npm/emergentbase-visual-edits-1.0.8.tgz",
         "@eslint/js": "9.23.0",
         "autoprefixer": "^10.4.20",
         "cross-env": "^7.0.3",
@@ -369,8 +368,6 @@
     "@csstools/postcss-unset-value": ["@csstools/postcss-unset-value@1.0.2", "", {}, "sha512-c8J4roPBILnelAsdLr4XOAR/GsTm0GJi4XpcfvoWk3U6KiTCqiFYc63KhRMQQX35jYMp4Ao8Ij9+IZRgMfJp1g=="],
 
     "@csstools/selector-specificity": ["@csstools/selector-specificity@2.2.0", "", {}, "sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw=="],
-
-    "@emergentbase/visual-edits": ["@emergentbase/visual-edits@https://assets.emergent.sh/npm/emergentbase-visual-edits-1.0.8.tgz", { "peerDependencies": { "@babel/core": "^7.0.0", "@babel/generator": "^7.0.0", "@babel/parser": "^7.0.0", "@babel/traverse": "^7.0.0", "express": "^4.0.0" }, "optionalPeers": ["@babel/core", "@babel/generator", "@babel/parser", "@babel/traverse", "express"] }, "sha512-n6vWWr/H8mUvuQqjtZzzGXUS6RDhcIIzT8VjX8EOFOk8sgoMjVoA9pFl6XG+wJuIOS7QAKK+QjiKipLHoVvbWA=="],
 
     "@eslint-community/eslint-utils": ["@eslint-community/eslint-utils@4.9.1", "", { "dependencies": { "eslint-visitor-keys": "^3.4.3" } }, "sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ=="],
 

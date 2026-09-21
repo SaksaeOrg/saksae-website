@@ -1,0 +1,15 @@
+{
+  "name": "saksae-static",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SAKSAE marketing site \u2014 static HTML/CSS/JS, Tailwind as the only build step.",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./css/styles.css --minify",
+    "dev": "tailwindcss -i ./src/input.css -o ./css/styles.css --watch",
+    "serve": "python3 -m http.server 8080",
+    "deploy": "npm run build && node deploy.mjs"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}
