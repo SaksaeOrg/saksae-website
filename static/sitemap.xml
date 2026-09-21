@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pas de <lastmod> : il serait écrit en dur et donc faux dès la première
+  modification. Google ignore un lastmod qu'il juge peu fiable, et un lastmod
+  faux est moins utile qu'aucun.
+
+  La version anglaise viendra s'ajouter ici avec les annotations hreflang
+  correspondantes — voir l'issue #6.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://saksae.com/</loc>
+  </url>
+</urlset>

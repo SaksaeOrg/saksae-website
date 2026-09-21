@@ -7,11 +7,14 @@ no npm package shipped to the browser.
 ```
 static/
 ├── index.html          the whole page, French, with the icon sprite inlined
+├── robots.txt          published at the site root
+├── sitemap.xml         published at the site root
 ├── css/styles.css      built by Tailwind — committed, do not edit by hand
 ├── src/input.css       Tailwind entry + design tokens + the animation system
+├── src/og-image.html   source of assets/og-image.png (not published)
 ├── js/i18n-data.js     English strings (French lives in index.html)
 ├── js/main.js          all behaviour
-├── assets/             logo + the generated icon sprite
+├── assets/             logo, icon sprite, social preview image
 ├── deploy.mjs          publishes into ../docs
 ├── tailwind.config.js
 └── CNAME
@@ -64,6 +67,13 @@ without overshoot. Everything else matches the original timings.
 Anything that starts invisible is scoped under `.js-on` (added by `main.js` on
 boot), so the page still reads correctly with JavaScript disabled.
 `prefers-reduced-motion` disables the lot.
+
+**Social preview.** `assets/og-image.png` (1200×630) is what LinkedIn, Slack
+and X display. Its source is `src/og-image.html`, which reuses the page's own
+headline — a preview promising something the page doesn't deliver costs
+click-through. To regenerate after editing, screenshot that file at 1200×630
+with `deviceScaleFactor: 1`, then quantise to 256 colours (it is flat colour
+plus text, so this halves the file with no visible loss).
 
 ## Checks
 
