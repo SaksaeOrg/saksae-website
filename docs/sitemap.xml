@@ -15,12 +15,32 @@
     <loc>https://saksae.com/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
   </url>
   <url>
     <loc>https://saksae.com/en/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
+  </url>
+  <url>
+    <loc>https://saksae.com/vi/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
+  </url>
+  <url>
+    <loc>https://saksae.com/th/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
   </url>
 </urlset>
