@@ -1,0 +1,470 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,450;14..32,500;14..32,600;14..32,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
+
+:root {
+  --bg-primary: #fafafa;
+  --bg-secondary: #ffffff;
+  --bg-dark: #0a0a0a;
+  --text-primary: #0a0a0a;
+  --text-secondary: #52525b;
+  --text-muted: #a1a1aa;
+  --text-light: #d4d4d8;
+  --border-light: #e4e4e7;
+  --border-subtle: #f4f4f5;
+  --accent: #295cf0;
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --duration-fast: 180ms;
+  --duration-normal: 240ms;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Beats display utilities (.flex, .grid) applied to the same element. */
+  [hidden] {
+    display: none !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-optical-sizing: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+  }
+
+  ::selection {
+    background-color: var(--bg-dark);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-light);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+}
+
+/* ==========================================================================
+   Typography & decorative components
+   ========================================================================== */
+
+/* Plain (unlayered) so they land after Tailwind's utilities, exactly as in the
+   original stylesheet: `.section-tag block` must keep its inline-flex display. */
+.text-hero {
+  font-size: clamp(2.75rem, 5.5vw, 4.25rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+.text-section-title {
+  font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+}
+
+.section-tag {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.section-tag::before {
+  content: '';
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.5px;
+  background-color: var(--accent);
+  border-radius: 1px;
+}
+
+.dotted-pattern {
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.05) 0.75px, transparent 0.75px);
+  background-size: 28px 28px;
+}
+
+.grid-pattern {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.018) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* Icon helper: <svg class="icon w-4 h-4"><use href="#i-zap"/></svg> */
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  stroke-width: 2;
+  vertical-align: middle;
+}
+
+.icon-thin {
+  stroke-width: 1.5;
+}
+
+/* ==========================================================================
+   Scroll reveals — replaces framer-motion whileInView
+   Driven by an IntersectionObserver that adds .is-visible.
+   ========================================================================== */
+
+.js-on .reveal {
+  opacity: 0;
+  transform: translate3d(var(--rx, 0), var(--ry, 28px), 0);
+  transition:
+    opacity var(--rd, 650ms) var(--ease-premium) var(--dl, 0ms),
+    transform var(--rd, 650ms) var(--ease-premium) var(--dl, 0ms);
+  will-change: opacity, transform;
+}
+
+.js-on .reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Section-header rhythm, matching the original motion values. */
+.r-tag {
+  --rx: -8px;
+  --ry: 0;
+  --rd: 500ms;
+}
+
+.r-title {
+  --ry: 20px;
+  --rd: 600ms;
+  --dl: 80ms;
+}
+
+.r-desc {
+  --ry: 16px;
+  --rd: 600ms;
+  --dl: 160ms;
+}
+
+/* Card entrances: 0.25s base + 0.12s per index, scale 0.97 -> 1. */
+.js-on .r-card {
+  --ry: 20px;
+  --rd: 500ms;
+  opacity: 0;
+  transform: translate3d(0, var(--ry), 0) scale(0.97);
+}
+
+.js-on .r-card.is-visible {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* ==========================================================================
+   Hero intro — plays on load, not on scroll
+   ========================================================================== */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.intro {
+  opacity: 0;
+  animation: rise-in 700ms var(--ease-premium) forwards;
+  animation-delay: var(--dl, 0ms);
+}
+
+@keyframes header-drop {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.intro-header {
+  animation: header-drop 500ms var(--ease-premium) both;
+}
+
+/* ==========================================================================
+   Hero ambient layer
+   ========================================================================== */
+
+/* framer: opacity [0, .5, .5, 0] over 5s, repeatDelay 3s -> 8s loop */
+@keyframes ambient-pulse {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  20.8% {
+    opacity: 0.5;
+  }
+  41.7% {
+    opacity: 0.5;
+  }
+  62.5% {
+    opacity: 0;
+  }
+}
+
+.ambient-signal {
+  opacity: 0;
+  animation: ambient-pulse 8s ease-in-out infinite;
+  animation-delay: var(--dl, 0ms);
+}
+
+/* Action popups: JS toggles .is-in / .is-out */
+.js-on .hero-popup {
+  opacity: 0;
+  transform: translate3d(0, 8px, 0) scale(0.95);
+  transition:
+    opacity 550ms var(--ease-premium),
+    transform 550ms var(--ease-premium);
+}
+
+.hero-popup.is-in {
+  opacity: 0.5;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.hero-popup.is-out {
+  opacity: 0;
+  transform: translate3d(0, -6px, 0) scale(0.97);
+}
+
+/* ==========================================================================
+   Panel swap — replaces <AnimatePresence mode="wait">
+   ========================================================================== */
+
+.panel {
+  transition:
+    opacity var(--pd, 200ms) var(--ease-premium),
+    transform var(--pd, 200ms) var(--ease-premium);
+}
+
+.panel.is-leaving {
+  opacity: 0;
+  transform: translate3d(0, -4px, 0);
+}
+
+.panel.is-entering {
+  opacity: 0;
+  transform: translate3d(0, var(--pin, 4px), 0);
+}
+
+/* Staggered children inside a freshly-entered panel. */
+.js-on .stagger > * {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+}
+
+.js-on .stagger.is-playing > * {
+  animation: rise-in 400ms var(--ease-premium) forwards;
+}
+
+.js-on .stagger.is-playing > *:nth-child(1) {
+  animation-delay: 100ms;
+}
+.js-on .stagger.is-playing > *:nth-child(2) {
+  animation-delay: 180ms;
+}
+.js-on .stagger.is-playing > *:nth-child(3) {
+  animation-delay: 260ms;
+}
+.js-on .stagger.is-playing > *:nth-child(4) {
+  animation-delay: 340ms;
+}
+.js-on .stagger.is-playing > *:nth-child(5) {
+  animation-delay: 420ms;
+}
+.js-on .stagger.is-playing > *:nth-child(6) {
+  animation-delay: 500ms;
+}
+
+/* ==========================================================================
+   Moving tab underline — replaces framer layoutId
+   ========================================================================== */
+
+.tab-underline {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background-color: #0a0a0a;
+  border-radius: 1px;
+  left: 0;
+  width: 0;
+  opacity: 0;
+  transition:
+    transform 380ms var(--ease-premium),
+    width 380ms var(--ease-premium),
+    opacity 180ms linear;
+  pointer-events: none;
+}
+
+.tab-underline.is-ready {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Collapsibles — replaces animated height: auto
+   ========================================================================== */
+
+.collapse {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    height 250ms var(--ease-out),
+    opacity 250ms var(--ease-out);
+}
+
+/* ==========================================================================
+   Progress fills — width animates once its panel becomes active
+   ========================================================================== */
+
+.bar-fill {
+  width: 0;
+  transition: width var(--bd, 800ms) var(--ease-premium) var(--dl, 0ms);
+}
+
+.is-active .bar-fill,
+.bar-fill.is-filled {
+  width: var(--bw, 0%);
+}
+
+/* Playbook stepper */
+.js-on .step-pop {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.is-active .step-pop {
+  animation: step-pop-in 350ms var(--ease-premium) forwards;
+  animation-delay: var(--dl, 0ms);
+}
+
+@keyframes step-pop-in {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.js-on .step-line {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.is-active .step-line {
+  animation: step-line-in 400ms var(--ease-premium) forwards;
+  animation-delay: var(--dl, 0ms);
+}
+
+@keyframes step-line-in {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ==========================================================================
+   Modal
+   ========================================================================== */
+
+.modal-backdrop {
+  opacity: 0;
+  transition: opacity 200ms var(--ease-out);
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+}
+
+.modal-card {
+  opacity: 0;
+  transform: scale(0.95);
+  transition:
+    opacity 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.modal-backdrop.is-open .modal-card {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .js-on .reveal,
+  .js-on .r-card,
+  .intro,
+  .js-on .stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .ambient-signal {
+    opacity: 0.5;
+  }
+}
