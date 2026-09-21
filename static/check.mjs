@@ -126,7 +126,28 @@ if (ldMatch) {
 }
 
 /* ------------------------------------------------------------------ *
- * 2. Traductions : couverture dans les deux sens
+ * 2. Police : auto-hébergée, et le fichier déclaré existe
+ * ------------------------------------------------------------------ */
+
+const css = readFileSync(join(here, 'css', 'styles.css'), 'utf8');
+const externalFonts = [html, css].some((f) => /fonts\.(googleapis|gstatic)\.com/.test(f));
+ok("aucune requête de police vers Google", !externalFonts);
+
+const srcMatch = css.match(/@font-face\{[^}]*src:url\(([^)]+)\)/);
+ok('le @font-face déclare une source', !!srcMatch);
+if (srcMatch) {
+  const rel = srcMatch[1].replace(/^['"]|['"]$/g, '').replace(/^\.\.\//, '');
+  let exists = true;
+  try {
+    readFileSync(join(here, rel));
+  } catch {
+    exists = false;
+  }
+  ok('le fichier de police déclaré existe', exists, rel);
+}
+
+/* ------------------------------------------------------------------ *
+ * 3. Traductions : couverture dans les deux sens
  * ------------------------------------------------------------------ */
 
 globalThis.window = {};
@@ -140,7 +161,7 @@ ok('chaque clé du HTML a une traduction anglaise', missing.length === 0, missin
 ok('aucune traduction anglaise orpheline', unused.length === 0, unused.join(', '));
 
 /* ------------------------------------------------------------------ *
- * 3. Sprite d'icônes : chaque <use> pointe vers un <symbol> existant
+ * 4. Sprite d'icônes : chaque <use> pointe vers un <symbol> existant
  * ------------------------------------------------------------------ */
 
 const defined = new Set([...html.matchAll(/<symbol id="(i-[a-z0-9-]+)"/g)].map((m) => m[1]));
