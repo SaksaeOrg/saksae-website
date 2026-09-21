@@ -12,8 +12,9 @@ static/
 ├── css/styles.css      built by Tailwind — committed, do not edit by hand
 ├── src/input.css       Tailwind entry + design tokens + the animation system
 ├── src/og-image.html   source of assets/og-image.png (not published)
+├── src/i18n-en.mjs     English strings, build-time only
+├── src/build-en.mjs    generates the English page
 ├── src/build-font.py   regenerates the subsetted Inter file (one-off)
-├── js/i18n-data.js     English strings (French lives in index.html)
 ├── js/main.js          all behaviour
 ├── assets/             logo, icon sprite, social image, self-hosted Inter
 ├── check.mjs           consistency checks, run before every deploy
@@ -38,14 +39,40 @@ build output is part of the repo.
 
 ## How it works
 
-**Languages.** French is the source of truth and lives in `index.html`.
-Elements that change carry `data-i18n` (text) or `data-i18n-html` (markup with
-`<br>`); `js/i18n-data.js` holds only the English side. On load, `main.js`
-snapshots the French DOM, so switching back to `fr` restores it exactly. The
-choice persists in `localStorage` under `saksae-lang`.
+**Languages.** Both versions are **generated at build time and served as
+separate pages**, because a single URL can only ever be indexed in one
+language.
+
+```
+/          index.html            French — the source you edit
+/en/       docs/en/index.html    English — generated, never edited by hand
+```
+
+French is the source of truth and lives in `index.html`. Elements that change
+carry `data-i18n` (text content), `data-i18n-html` (content with markup) or
+`data-i18n-label` (the `aria-label` of a decorative mockup). `src/i18n-en.mjs`
+holds the English counterpart of every key, plus the `<head>` metadata that
+cannot carry an attribute.
+
+At deploy time, `src/build-en.mjs` substitutes the translations and rewrites
+what belongs to the language: `lang`, `<title>`, description, canonical,
+`og:*`, the JSON-LD, and the language selector — which is a **link to the other
+URL**, not a JavaScript toggle. Nothing is translated in the browser: neither
+dictionary ships. Only the handful of strings JavaScript composes (step
+counters, prices, calculator totals) live in `main.js`, keyed off `<html lang>`.
+
+The substitution is targeted rather than done through an HTML parser. Parsers
+re-serialise the document and drift (self-closing tags rewritten, attributes
+normalised); here only translated text changes, so both pages share the exact
+same structure. Every key must resolve or the build fails — `npm run check`
+runs the generation in memory before anything is published.
 
 To change French copy, edit `index.html`. To change English, edit
-`js/i18n-data.js`. Every key must exist in both — see *Checks* below.
+`src/i18n-en.mjs`. Both pages carry the same `hreflang` set (`fr`, `en`,
+`x-default`), and the sitemap lists both URLs with their alternates.
+
+All local paths are absolute (`/css/…`, `/js/…`, `/assets/…`) so `/en/` resolves
+them from the site root.
 
 **Icons.** `assets/icons.svg` is a sprite of the 41 [lucide](https://lucide.dev)
 icons the page uses (ISC licensed), inlined into `index.html` at assembly time.
@@ -103,14 +130,16 @@ page:
 - **Structured-data prices** match the pricing section. The JSON-LD in the
   `<head>` necessarily duplicates them, so the check compares every figure
   against `data-monthly` / `data-annual` on the cards — and, for the Enterprise
-  plan which has no such attributes, against `SAKSAE_DYN.fr.entMonthly` in
-  `js/i18n-data.js`. Plan names, `offerCount`, `lowPrice` and `highPrice` are
+  plan which has no such attributes, against the `DYN` table in `js/main.js`. Plan names, `offerCount`, `lowPrice` and `highPrice` are
   checked too, and every `@id` reference must resolve inside the graph.
 - **Translation coverage** both ways: every `data-i18n`, `data-i18n-html` and
   `data-i18n-label` key has an English counterpart, and no English string is
   orphaned.
 - **Icon sprite**: every `<use>` resolves to a `<symbol>`, and no symbol is
   left unused.
+- **The English page generates cleanly**: the build runs in memory, and any key
+  that fails to apply stops the deploy rather than shipping French text on
+  `/en/`. `hreflang` completeness and the sitemap's alternates are checked too.
 
 Change a price in one place only and the deploy stops with the mismatch
 spelled out. That is the point: a page advertising 279 € while its structured
@@ -126,7 +155,8 @@ npm run deploy     # rebuilds css, then rewrites ../docs
 git add ../docs && git commit
 ```
 
-`deploy.mjs` wipes `docs/` and copies `index.html`, `CNAME`, `css/`, `js/` and
-`assets/` into it. Source files (`src/`, `package.json`, `deploy.mjs`, this
+`deploy.mjs` wipes `docs/` and copies `index.html`, `robots.txt`, `sitemap.xml`,
+`CNAME`, `css/`, `js/` and `assets/` into it, then generates `docs/en/index.html`
+from the French source. Source files (`src/`, `package.json`, `deploy.mjs`, this
 README) stay behind and are never published. Treat `docs/` as build output:
 committed, but never hand-edited.

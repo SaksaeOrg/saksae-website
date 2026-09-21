@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./index.html', './js/**/*.js'],
+  // src/i18n-en.mjs porte des classes utilisées uniquement par la page
+  // anglaise : sans ce scan, Tailwind les purgerait silencieusement.
+  content: ['./index.html', './js/**/*.js', './src/i18n-en.mjs'],
   theme: {
     extend: {
       transitionTimingFunction: {

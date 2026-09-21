@@ -1,15 +1,15 @@
 /**
- * English translations.
+ * Traductions anglaises — utilisées uniquement au build.
  *
- * French is the source of truth and lives directly in index.html, marked with
- * `data-i18n` (textContent) or `data-i18n-html` (innerHTML). This file only
- * carries the English override for each key; switching back to French restores
- * the snapshot taken from the DOM on load.
+ * Le français est la source et vit dans index.html ; ce fichier porte la
+ * contrepartie anglaise de chaque clé `data-i18n`, `data-i18n-html` et
+ * `data-i18n-label`. `deploy.mjs` les applique pour produire docs/en/index.html.
  *
- * `SAKSAE_DYN` holds the handful of strings that JavaScript composes at runtime
- * (counters, prices, totals) and therefore cannot live in the markup.
+ * Rien de tout cela n'est envoyé au navigateur : les deux pages sont servies
+ * déjà traduites. Les rares chaînes composées à l'exécution (compteurs, prix,
+ * totaux du calculateur) vivent dans js/main.js.
  */
-window.SAKSAE_EN = {
+export const strings = {
   'a11y.skip': 'Skip to content',
 
   'nav.platform': 'Platform',
@@ -293,26 +293,13 @@ window.SAKSAE_EN = {
   'footer.rights': 'All rights reserved.',
 };
 
-/** Strings composed at runtime, so they cannot live in the markup. */
-window.SAKSAE_DYN = {
-  fr: {
-    greeting: "Bonjour Christophe, voici vos actions prioritaires pour aujourd'hui.",
-    stepCounter: (n, total) => `Étape ${n} sur ${total}`,
-    instead: (price) => `Au lieu de €${price}/mois`,
-    entMonthly: 'dès 1 200',
-    entAnnual: 'Sur devis',
-    perUser: 'mois/utilisateur',
-    perMonth: 'mois',
-    perYear: 'an par utilisateur',
-  },
-  en: {
-    greeting: 'Hello Christophe, here are your priority actions for today.',
-    stepCounter: (n, total) => `Step ${n} of ${total}`,
-    instead: (price) => `Instead of €${price}/mo`,
-    entMonthly: 'from 1,200',
-    entAnnual: 'Custom',
-    perUser: 'mo/user',
-    perMonth: 'mo',
-    perYear: 'year per user',
-  },
+/** Métadonnées du <head>, qui ne peuvent pas porter d'attribut data-i18n. */
+export const head = {
+  title: 'SAKSAE — The AI Business Execution platform',
+  description:
+    "SAKSAE centralizes your tools, analyzes your operations and revenue data, and turns them into actions. The AI Business Execution platform for Freelancers and SMEs.",
+  ogTitle: 'SAKSAE — The AI Business Execution platform',
+  ogDescription:
+    "Centralize your tools, spot your priorities, take action. For freelancers and small businesses.",
+  ogImageAlt: 'SAKSAE — The #1 AI Business platform for Freelancers & SMEs',
 };

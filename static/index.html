@@ -10,8 +10,11 @@
       content="SAKSAE centralise vos outils, analyse vos données d'opérations et de revenus, et les transforme en actions. La plateforme d'Exécution Business IA pour Indépendants, TPE et PME."
     />
     <link rel="canonical" href="https://saksae.com/" />
-    <link rel="icon" type="image/svg+xml" href="assets/logo-saksae.svg" />
-    <link rel="apple-touch-icon" href="assets/logo-saksae.png" />
+    <link rel="alternate" hreflang="fr" href="https://saksae.com/" />
+    <link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-saksae.svg" />
+    <link rel="apple-touch-icon" href="/assets/logo-saksae.png" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SAKSAE" />
@@ -40,10 +43,10 @@
       rel="preload"
       as="font"
       type="font/woff2"
-      href="assets/inter-latin-var.woff2"
+      href="/assets/inter-latin-var.woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
 
     <!--
       Données structurées. Les tarifs sont dupliqués depuis la section [05] :
@@ -212,7 +215,7 @@
         <div class="flex items-center justify-between h-[64px]">
           <a href="/" class="flex items-center group">
             <img
-              src="assets/logo-saksae.svg"
+              src="/assets/logo-saksae.svg"
               alt="SAKSAE"
               width="74"
               height="60"
@@ -242,13 +245,15 @@
           </nav>
 
           <div class="hidden md:flex items-center gap-2">
-            <button
-              type="button"
-              data-lang-toggle
+            <a
+              href="/en/"
+              hreflang="en"
+              data-lang-link
+              aria-label="Switch to English"
               class="px-2.5 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#52525B] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium"
             >
-              fr
-            </button>
+              en
+            </a>
           </div>
 
           <button
@@ -271,13 +276,15 @@
               <a href="#ai-tools" class="py-2.5 text-[14px] text-[#52525B]" data-i18n="nav.tools">Outils IA</a>
               <a href="#pricing" class="py-2.5 text-[14px] text-[#52525B]" data-i18n="nav.pricing">Tarification</a>
               <div class="flex items-center gap-4 pt-4 mt-2 border-t border-[#E4E4E7]/60">
-                <button
-                  type="button"
-                  data-lang-toggle
+                <a
+                  href="/en/"
+                  hreflang="en"
+                  data-lang-link
+                  aria-label="Switch to English"
                   class="text-[11px] text-[#6E6E77] uppercase tracking-wider font-medium"
                 >
-                  fr
-                </button>
+                  en
+                </a>
               </div>
             </div>
           </div>
@@ -2273,7 +2280,7 @@ Christophe</p>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
           <div class="col-span-2 md:col-span-2">
             <div class="flex items-center mb-4">
-              <img src="assets/logo-saksae.svg" alt="SAKSAE" width="99" height="80" class="h-20 w-auto" />
+              <img src="/assets/logo-saksae.svg" alt="SAKSAE" width="99" height="80" class="h-20 w-auto" />
             </div>
             <p class="text-[13px] text-[#6E6E77] leading-[1.7] max-w-xs" data-i18n="footer.tagline">
               La plateforme d'Exécution Business IA pour Indépendants, TPE et PME.
@@ -2358,7 +2365,6 @@ Christophe</p>
       </div>
     </div>
 
-    <script src="js/i18n-data.js" defer></script>
-    <script src="js/main.js" defer></script>
+    <script src="/js/main.js" defer></script>
   </body>
 </html>

@@ -13,6 +13,8 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildEnglish } from './src/build-en.mjs';
+import { strings, head } from './src/i18n-en.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const html = readFileSync(join(here, 'index.html'), 'utf8');
@@ -83,13 +85,13 @@ if (ldMatch) {
       if (card.custom) {
         // Source de vérité 2 : le plan Entreprise n'a pas d'attributs data-*,
         // ses libellés viennent de SAKSAE_DYN dans js/i18n-data.js.
-        const dyn = readFileSync(join(here, 'js', 'i18n-data.js'), 'utf8');
+        const dyn = readFileSync(join(here, 'js', 'main.js'), 'utf8');
         const frMonthly = (dyn.match(/entMonthly:\s*'([^']+)'/) || [])[1] || '';
         const digits = frMonthly.replace(/[^\d]/g, '');
         ok(
-          `${card.key} : le prix plancher suit i18n-data.js`,
+          `${card.key} : le prix plancher suit main.js`,
           priceOf(offer, 'partir de') === digits,
-          `JSON-LD=${priceOf(offer, 'partir de')} vs SAKSAE_DYN="${frMonthly}"`
+          `JSON-LD=${priceOf(offer, 'partir de')} vs main.js DYN="${frMonthly}"`
         );
       } else {
         ok(
@@ -147,13 +149,28 @@ if (srcMatch) {
 }
 
 /* ------------------------------------------------------------------ *
- * 3. Traductions : couverture dans les deux sens
+ * 3. Version anglaise : la génération doit aboutir sans trou
  * ------------------------------------------------------------------ */
 
-globalThis.window = {};
-const i18n = readFileSync(join(here, 'js', 'i18n-data.js'), 'utf8');
-new Function(i18n)();
-const EN = globalThis.window.SAKSAE_EN || {};
+const { applied, problems } = buildEnglish(html, strings, head);
+ok('la page anglaise se génère sans problème', problems.length === 0, problems.slice(0, 3).join(' | '));
+ok('toutes les clés du HTML sont appliquées', applied.size > 0, `${applied.size} clés`);
+
+// hreflang : chaque page doit déclarer l'ensemble complet, y compris elle-même.
+const hre = [...html.matchAll(/hreflang="([\w-]+)" href="([^"]+)"/g)].map((m) => m[1]);
+ok('la page déclare fr, en et x-default', ['fr', 'en', 'x-default'].every((h) => hre.includes(h)), hre.join(', '));
+
+const sitemap = readFileSync(join(here, 'sitemap.xml'), 'utf8');
+const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+ok('le sitemap liste les deux langues', locs.length === 2 && locs.includes('https://saksae.com/en/'), locs.join(', '));
+const altCount = (sitemap.match(/xhtml:link/g) || []).length;
+ok('le sitemap déclare 3 alternatives par URL', altCount === locs.length * 3, `${altCount} déclarations`);
+
+/* ------------------------------------------------------------------ *
+ * 4. Traductions : couverture dans les deux sens
+ * ------------------------------------------------------------------ */
+
+const EN = strings;
 const keys = [...new Set([...html.matchAll(/data-i18n(?:-html|-label)?="([^"]+)"/g)].map((m) => m[1]))];
 const missing = keys.filter((k) => !(k in EN));
 const unused = Object.keys(EN).filter((k) => !keys.includes(k));
@@ -161,7 +178,7 @@ ok('chaque clé du HTML a une traduction anglaise', missing.length === 0, missin
 ok('aucune traduction anglaise orpheline', unused.length === 0, unused.join(', '));
 
 /* ------------------------------------------------------------------ *
- * 4. Sprite d'icônes : chaque <use> pointe vers un <symbol> existant
+ * 5. Sprite d'icônes : chaque <use> pointe vers un <symbol> existant
  * ------------------------------------------------------------------ */
 
 const defined = new Set([...html.matchAll(/<symbol id="(i-[a-z0-9-]+)"/g)].map((m) => m[1]));
