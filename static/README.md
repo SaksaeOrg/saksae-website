@@ -15,6 +15,7 @@ static/
 ├── js/i18n-data.js     English strings (French lives in index.html)
 ├── js/main.js          all behaviour
 ├── assets/             logo, icon sprite, social preview image
+├── check.mjs           consistency checks, run before every deploy
 ├── deploy.mjs          publishes into ../docs
 ├── tailwind.config.js
 └── CNAME
@@ -27,6 +28,7 @@ npm install        # installs tailwindcss only
 npm run dev        # rebuild css/styles.css on change
 npm run serve      # http://localhost:8080
 npm run build      # minified css/styles.css
+npm run check      # consistency checks
 npm run deploy     # build, then publish into ../docs
 ```
 
@@ -78,20 +80,28 @@ plus text, so this halves the file with no visible loss).
 ## Checks
 
 ```sh
-# every data-i18n key has an English counterpart, and vice versa
-node -e "
-const fs=require('fs'),h=fs.readFileSync('index.html','utf8');
-global.window={};eval(fs.readFileSync('js/i18n-data.js','utf8'));
-const k=[...new Set([...h.matchAll(/data-i18n(?:-html|-label)?=\"([^\"]+)\"/g)].map(m=>m[1]))];
-console.log('missing EN:',k.filter(x=>!(x in window.SAKSAE_EN)));
-console.log('unused EN:',Object.keys(window.SAKSAE_EN).filter(x=>!k.includes(x)));"
-
-# every <use> resolves to a symbol in the sprite
-node -e "
-const h=require('fs').readFileSync('index.html','utf8');
-const d=new Set([...h.matchAll(/<symbol id=\"(i-[a-z0-9-]+)\"/g)].map(m=>m[1]));
-console.log('missing icons:',[...new Set([...h.matchAll(/<use href=\"#(i-[a-z0-9-]+)\"/g)].map(m=>m[1]))].filter(x=>!d.has(x)));"
+npm run check
 ```
+
+`check.mjs` runs before every deploy, and a failure blocks publication. It has
+no dependencies. It catches the kind of drift that does not visibly break the
+page:
+
+- **Structured-data prices** match the pricing section. The JSON-LD in the
+  `<head>` necessarily duplicates them, so the check compares every figure
+  against `data-monthly` / `data-annual` on the cards — and, for the Enterprise
+  plan which has no such attributes, against `SAKSAE_DYN.fr.entMonthly` in
+  `js/i18n-data.js`. Plan names, `offerCount`, `lowPrice` and `highPrice` are
+  checked too, and every `@id` reference must resolve inside the graph.
+- **Translation coverage** both ways: every `data-i18n`, `data-i18n-html` and
+  `data-i18n-label` key has an English counterpart, and no English string is
+  orphaned.
+- **Icon sprite**: every `<use>` resolves to a `<symbol>`, and no symbol is
+  left unused.
+
+Change a price in one place only and the deploy stops with the mismatch
+spelled out. That is the point: a page advertising 279 € while its structured
+data says 289 € is worse than no structured data at all.
 
 ## Deploying
 
