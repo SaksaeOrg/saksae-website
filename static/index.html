@@ -12,6 +12,8 @@
     <link rel="canonical" href="https://saksae.com/" />
     <link rel="alternate" hreflang="fr" href="https://saksae.com/" />
     <link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
+    <link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
+    <link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
     <link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
     <link rel="icon" type="image/svg+xml" href="/assets/logo-saksae.svg" />
     <link rel="apple-touch-icon" href="/assets/logo-saksae.png" />
@@ -25,7 +27,7 @@
     />
     <meta property="og:url" content="https://saksae.com/" />
     <meta property="og:locale" content="fr_FR" />
-    <meta property="og:image" content="https://saksae.com/assets/og-image.png" />
+    <meta property="og:image" content="https://saksae.com/assets/og-image-fr.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
@@ -33,7 +35,7 @@
       content="SAKSAE — #1 plateforme business IA pour Indépendants, TPE/PME"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://saksae.com/assets/og-image.png" />
+    <meta name="twitter:image" content="https://saksae.com/assets/og-image-fr.png" />
 
     <!-- Police auto-hébergée : plus aucune requête vers Google depuis le
          navigateur du visiteur. Le preload la fait partir en parallèle de la
@@ -43,7 +45,7 @@
       rel="preload"
       as="font"
       type="font/woff2"
-      href="/assets/inter-latin-var.woff2"
+      href="/assets/inter-latin.woff2"
       crossorigin
     />
     <link rel="stylesheet" href="/css/styles.css" />
@@ -245,15 +247,12 @@
           </nav>
 
           <div class="hidden md:flex items-center gap-2">
-            <a
-              href="/en/"
-              hreflang="en"
-              data-lang-link
-              aria-label="Switch to English"
-              class="px-2.5 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#52525B] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium"
-            >
-              en
-            </a>
+            <nav data-lang-switcher aria-label="Langue" class="flex items-center gap-0.5">
+              <span data-lang-current="fr" aria-current="true" class="px-2 py-1.5 text-[11px] text-[#0A0A0A] uppercase tracking-[0.08em] font-semibold">fr</span>
+              <a href="/en/" hreflang="en" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="Switch to English">en</a>
+              <a href="/vi/" hreflang="vi" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="Chuyển sang tiếng Việt">vi</a>
+              <a href="/th/" hreflang="th" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="เปลี่ยนเป็นภาษาไทย">th</a>
+            </nav>
           </div>
 
           <button
@@ -276,15 +275,12 @@
               <a href="#ai-tools" class="py-2.5 text-[14px] text-[#52525B]" data-i18n="nav.tools">Outils IA</a>
               <a href="#pricing" class="py-2.5 text-[14px] text-[#52525B]" data-i18n="nav.pricing">Tarification</a>
               <div class="flex items-center gap-4 pt-4 mt-2 border-t border-[#E4E4E7]/60">
-                <a
-                  href="/en/"
-                  hreflang="en"
-                  data-lang-link
-                  aria-label="Switch to English"
-                  class="text-[11px] text-[#6E6E77] uppercase tracking-wider font-medium"
-                >
-                  en
-                </a>
+                <nav data-lang-switcher aria-label="Langue" class="flex items-center gap-0.5">
+                  <span data-lang-current="fr" aria-current="true" class="px-2 py-1.5 text-[11px] text-[#0A0A0A] uppercase tracking-[0.08em] font-semibold">fr</span>
+                  <a href="/en/" hreflang="en" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="Switch to English">en</a>
+                  <a href="/vi/" hreflang="vi" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="Chuyển sang tiếng Việt">vi</a>
+                  <a href="/th/" hreflang="th" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="เปลี่ยนเป็นภาษาไทย">th</a>
+                </nav>
               </div>
             </div>
           </div>
