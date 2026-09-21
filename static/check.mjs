@@ -128,6 +128,20 @@ if (ldMatch) {
 }
 
 /* ------------------------------------------------------------------ *
+ * 2. Liens de réservation : une seule URL, partout
+ * ------------------------------------------------------------------ */
+
+// Le lien de prise de rendez-vous apparaît sur chaque CTA. Il a déjà été
+// changé sans que toutes les occurrences suivent ; ce contrôle attrape une
+// mise à jour partielle. Il ne dit rien de la validité de l'URL : seule une
+// requête réelle le dirait, et elle n'a pas sa place dans un build.
+const booking = [...new Set(
+  [...html.matchAll(/href="(https:\/\/(?!saksae\.com)[^"]+)"/g)].map((m) => m[1])
+)];
+ok('les CTA pointent tous vers la même URL', booking.length === 1, booking.join(', ') || 'aucun');
+ok('plus aucun lien Calendly', !html.includes('calendly.com'));
+
+/* ------------------------------------------------------------------ *
  * 2. Police : auto-hébergée, et le fichier déclaré existe
  * ------------------------------------------------------------------ */
 
@@ -167,7 +181,7 @@ const altCount = (sitemap.match(/xhtml:link/g) || []).length;
 ok('le sitemap déclare 3 alternatives par URL', altCount === locs.length * 3, `${altCount} déclarations`);
 
 /* ------------------------------------------------------------------ *
- * 4. Traductions : couverture dans les deux sens
+ * 5. Traductions : couverture dans les deux sens
  * ------------------------------------------------------------------ */
 
 const EN = strings;
@@ -178,7 +192,7 @@ ok('chaque clé du HTML a une traduction anglaise', missing.length === 0, missin
 ok('aucune traduction anglaise orpheline', unused.length === 0, unused.join(', '));
 
 /* ------------------------------------------------------------------ *
- * 5. Sprite d'icônes : chaque <use> pointe vers un <symbol> existant
+ * 6. Sprite d'icônes : chaque <use> pointe vers un <symbol> existant
  * ------------------------------------------------------------------ */
 
 const defined = new Set([...html.matchAll(/<symbol id="(i-[a-z0-9-]+)"/g)].map((m) => m[1]));
