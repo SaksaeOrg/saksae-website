@@ -11,7 +11,8 @@ static/
 ├── sitemap.xml         published at the site root
 ├── css/styles.css      built by Tailwind — committed, do not edit by hand
 ├── src/input.css       Tailwind entry + design tokens + the animation system
-├── src/og-image.html   source of assets/og-image.png (not published)
+├── src/og-image.html   template for the social previews (not published)
+├── src/build-og.mjs    renders one preview per language (one-off)
 ├── src/locales/        one file per language, build-time only
 ├── src/build-locale.mjs  generates a translated page
 ├── src/build-font.py   regenerates the subsetted font files (one-off)
@@ -133,12 +134,27 @@ Google's build nor our subset ships `cv01`–`cv13`. It is kept as a record of
 intent — switching to the upstream Inter release would activate it and change
 the rendering.
 
-**Social preview.** `assets/og-image.png` (1200×630) is what LinkedIn, Slack
-and X display. Its source is `src/og-image.html`, which reuses the page's own
-headline — a preview promising something the page doesn't deliver costs
-click-through. To regenerate after editing, screenshot that file at 1200×630
-with `deviceScaleFactor: 1`, then quantise to 256 colours (it is flat colour
-plus text, so this halves the file with no visible loss).
+**Social preview.** One image per language — `assets/og-image-<code>.png`,
+1200×630 — which is what LinkedIn, Slack and X display. Their source is
+`src/og-image.html`, a template filled from the locale files, so the preview
+always carries the same headline as the page it links to: one that promises
+something else costs click-through.
+
+```sh
+npm install --no-save playwright
+npx playwright install chromium      # or: export CHROMIUM_PATH=/path/to/chrome
+node src/build-og.mjs
+```
+
+The renderer is a browser rather than an image library, so the layout, the
+self-hosted fonts and the dotted ground are reused as they are. **The headline
+shrinks until it fits**: Vietnamese needs three lines where French takes two,
+and the next language will be handled the same way without a hand-tuned size.
+Each file is then quantised to 256 colours, which halves it with no visible
+loss — flat colour plus text.
+
+`npm run check` verifies every language has its image at the right dimensions.
+An `og:image` pointing at a 404 only shows up on the first share.
 
 ## Checks
 

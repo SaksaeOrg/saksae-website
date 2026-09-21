@@ -291,6 +291,8 @@ export const head = {
   ogTitle: 'SAKSAE — Nền tảng Điều hành Kinh doanh AI',
   ogDescription:
     'Hợp nhất công cụ, phát hiện ưu tiên, hành động. Dành cho freelancer và doanh nghiệp nhỏ.',
+  /** Bandeau de l'image sociale. */
+  ogTag: 'Điều hành Kinh doanh AI',
   ogImageAlt: 'SAKSAE — Nền tảng kinh doanh AI số 1 cho freelancer và doanh nghiệp SME',
 };
 

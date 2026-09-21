@@ -301,6 +301,8 @@ export const head = {
   ogTitle: 'SAKSAE — The AI Business Execution platform',
   ogDescription:
     "Centralize your tools, spot your priorities, take action. For freelancers and small businesses.",
+  /** Bandeau de l'image sociale. */
+  ogTag: 'AI Business Execution',
   ogImageAlt: 'SAKSAE — The #1 AI Business platform for Freelancers & SMEs',
 };
 
