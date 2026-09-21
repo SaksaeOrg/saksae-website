@@ -4,9 +4,10 @@
 
   document.documentElement.classList.add('js-on');
 
-  var EN = window.SAKSAE_EN || {};
-  var DYN = window.SAKSAE_DYN;
-  var lang = 'fr';
+  // Les deux versions linguistiques sont générées au build : la page qu'on
+  // sert est déjà dans la bonne langue. Il ne reste au runtime que les
+  // chaînes composées (compteurs, prix, totaux), que le DOM ne peut pas porter.
+  var lang = document.documentElement.lang === 'en' ? 'en' : 'fr';
 
   var $ = function (sel, root) {
     return (root || document).querySelector(sel);
@@ -23,69 +24,39 @@
   };
 
   /* ====================================================================
-     i18n — French lives in the DOM, English comes from SAKSAE_EN
+     Chaînes composées à l'exécution
      ==================================================================== */
 
-  var frSnapshot = new Map();
-  var frLabels = new Map();
-
-  function snapshotFrench() {
-    $$('[data-i18n]').forEach(function (el) {
-      frSnapshot.set(el, el.textContent);
-    });
-    $$('[data-i18n-html]').forEach(function (el) {
-      frSnapshot.set(el, el.innerHTML);
-    });
-    // Les aria-label des maquettes décoratives vivent dans l'attribut, pas
-    // dans le contenu : ils ont leur propre instantané.
-    $$('[data-i18n-label]').forEach(function (el) {
-      frLabels.set(el, el.getAttribute('aria-label'));
-    });
-  }
-
-  function applyLanguage(next) {
-    lang = next === 'en' ? 'en' : 'fr';
-    document.documentElement.lang = lang;
-
-    $$('[data-i18n]').forEach(function (el) {
-      var key = el.getAttribute('data-i18n');
-      if (lang === 'en' && EN[key] != null) {
-        // Keys may carry entities (&amp;) or newlines; innerHTML keeps both intact.
-        el.innerHTML = EN[key];
-      } else {
-        el.textContent = frSnapshot.get(el);
-      }
-    });
-
-    $$('[data-i18n-html]').forEach(function (el) {
-      var key = el.getAttribute('data-i18n-html');
-      el.innerHTML = lang === 'en' && EN[key] != null ? EN[key] : frSnapshot.get(el);
-    });
-
-    $$('[data-i18n-label]').forEach(function (el) {
-      var key = el.getAttribute('data-i18n-label');
-      el.setAttribute(
-        'aria-label',
-        lang === 'en' && EN[key] != null ? EN[key] : frLabels.get(el)
-      );
-    });
-
-    $$('[data-lang-toggle]').forEach(function (btn) {
-      btn.textContent = lang;
-      btn.setAttribute('aria-label', lang === 'fr' ? 'Switch to English' : 'Passer en français');
-    });
-
-    try {
-      localStorage.setItem('saksae-lang', lang);
-    } catch (e) {
-      /* private mode, blocked storage — the page still works */
-    }
-
-    renderStepCounters();
-    renderPricing();
-    renderCalculator();
-    startTyping();
-  }
+  var DYN = {
+    fr: {
+      greeting: "Bonjour Christophe, voici vos actions prioritaires pour aujourd'hui.",
+      stepCounter: function (n, total) {
+        return 'Étape ' + n + ' sur ' + total;
+      },
+      instead: function (price) {
+        return 'Au lieu de €' + price + '/mois';
+      },
+      entMonthly: 'dès 1 200',
+      entAnnual: 'Sur devis',
+      perUser: 'mois/utilisateur',
+      perMonth: 'mois',
+      perYear: 'an par utilisateur',
+    },
+    en: {
+      greeting: 'Hello Christophe, here are your priority actions for today.',
+      stepCounter: function (n, total) {
+        return 'Step ' + n + ' of ' + total;
+      },
+      instead: function (price) {
+        return 'Instead of €' + price + '/mo';
+      },
+      entMonthly: 'from 1,200',
+      entAnnual: 'Custom',
+      perUser: 'mo/user',
+      perMonth: 'mo',
+      perYear: 'year per user',
+    },
+  };
 
   function t() {
     return DYN[lang];
@@ -273,19 +244,6 @@
       if (event.target.closest('a')) setOpen(false);
     });
 
-    $$('[data-i18n-label]').forEach(function (el) {
-      var key = el.getAttribute('data-i18n-label');
-      el.setAttribute(
-        'aria-label',
-        lang === 'en' && EN[key] != null ? EN[key] : frLabels.get(el)
-      );
-    });
-
-    $$('[data-lang-toggle]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        applyLanguage(lang === 'fr' ? 'en' : 'fr');
-      });
-    });
   }
 
   /* ====================================================================
@@ -689,15 +647,10 @@
      ==================================================================== */
 
   function init() {
-    snapshotFrench();
-
-    var saved = null;
-    try {
-      saved = localStorage.getItem('saksae-lang');
-    } catch (e) {
-      /* ignore */
-    }
-    applyLanguage(saved === 'en' ? 'en' : 'fr');
+    renderStepCounters();
+    renderPricing();
+    renderCalculator();
+    startTyping();
 
     var year = $('#footer-year');
     if (year) year.textContent = String(new Date().getFullYear());

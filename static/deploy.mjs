@@ -8,10 +8,12 @@
  * docs/ is build output: it is wiped and rewritten on every run. Run
  * `npm run build` first (or just use `npm run deploy`, which does both).
  */
-import { cp, mkdir, rm, readdir } from 'node:fs/promises';
+import { cp, mkdir, rm, readdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildEnglish } from './src/build-en.mjs';
+import { strings, head } from './src/i18n-en.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const docs = join(here, '..', 'docs');
@@ -33,6 +35,21 @@ await mkdir(docs, { recursive: true });
 for (const entry of PUBLISH) {
   await cp(join(here, entry), join(docs, entry), { recursive: true });
 }
+
+// La version anglaise est générée, pas maintenue à la main : le français
+// reste la source unique. Sans URL propre, elle serait invisible des moteurs.
+const fr = await readFile(join(here, 'index.html'), 'utf8');
+const { html: en, applied, problems } = buildEnglish(fr, strings, head);
+if (problems.length) {
+  console.error('génération de la page anglaise : échec');
+  problems.forEach((p) => console.error(`  - ${p}`));
+  process.exit(1);
+}
+await mkdir(join(docs, 'en'), { recursive: true });
+await writeFile(join(docs, 'en', 'index.html'), en);
+
+const substitutions = [...applied.values()].reduce((a, b) => a + b, 0);
+console.log(`en/index.html : ${applied.size} clés, ${substitutions} substitutions`);
 
 const listed = (await readdir(docs)).sort();
 console.log(`published to docs/: ${listed.join(', ')}`);

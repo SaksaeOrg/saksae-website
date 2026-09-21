@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Pas de <lastmod> : il serait écrit en dur et donc faux dès la première
-  modification. Google ignore un lastmod qu'il juge peu fiable, et un lastmod
-  faux est moins utile qu'aucun.
+  Pas de <lastmod> : écrit en dur il serait faux dès la première modification,
+  et Google ignore un lastmod qu'il juge peu fiable.
 
-  La version anglaise viendra s'ajouter ici avec les annotations hreflang
-  correspondantes — voir l'issue #6.
+  Chaque URL déclare l'ensemble complet des alternatives, y compris elle-même :
+  c'est ce que demande la spécification hreflang, et une déclaration
+  non réciproque est ignorée.
 -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+>
   <url>
     <loc>https://saksae.com/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
+  </url>
+  <url>
+    <loc>https://saksae.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
   </url>
 </urlset>
