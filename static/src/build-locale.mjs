@@ -109,6 +109,12 @@ export function buildLocale(html, locale) {
   );
   swap(`content="${FR.ogDescription}"`, `content="${attr(head.ogDescription)}"`, 'og:description');
   swap(`content="${FR.ogImageAlt}"`, `content="${attr(head.ogImageAlt)}"`, 'og:image:alt');
+  // og:image et twitter:image partagent la même URL : un seul remplacement.
+  swap(
+    `https://saksae.com/assets/og-image-${SOURCE.code}.png`,
+    `https://saksae.com/assets/og-image-${locale.code}.png`,
+    'og:image'
+  );
   swap(
     `<link rel="canonical" href="https://saksae.com${SOURCE.path}" />`,
     `<link rel="canonical" href="https://saksae.com${locale.path}" />`,

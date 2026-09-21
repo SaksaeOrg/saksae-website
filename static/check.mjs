@@ -161,6 +161,20 @@ for (const locale of TARGETS) {
   ).size, `${applied.size} clés`);
 }
 
+// Chaque langue doit avoir son aperçu social, aux bonnes dimensions : une
+// balise og:image pointant vers un 404 ne se voit qu'au premier partage.
+for (const locale of ALL) {
+  const rel = `assets/og-image-${locale.code}.png`;
+  let dims = null;
+  try {
+    const buf = readFileSync(join(here, rel));
+    dims = [buf.readUInt32BE(16), buf.readUInt32BE(20)];
+  } catch {
+    /* absent */
+  }
+  ok(`aperçu social « ${locale.code} » en 1200x630`, dims?.[0] === 1200 && dims?.[1] === 630, dims ? dims.join('x') : 'fichier absent');
+}
+
 // hreflang : chaque page déclare l'ensemble complet, elle-même comprise.
 const hre = [...html.matchAll(/hreflang="([\w-]+)" href="([^"]+)"/g)].map((m) => m[1]);
 const expected = [...ALL.map((l) => l.hreflang), 'x-default'];
