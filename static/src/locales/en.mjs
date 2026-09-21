@@ -303,3 +303,10 @@ export const head = {
     "Centralize your tools, spot your priorities, take action. For freelancers and small businesses.",
   ogImageAlt: 'SAKSAE — The #1 AI Business platform for Freelancers & SMEs',
 };
+
+/** Libellés des données structurées (les noms de formules viennent de `strings`). */
+export const jsonld = {
+  billingAnnual: 'Annual billing',
+  billingMonthly: 'Monthly billing',
+  billingFrom: 'Monthly billing, from',
+};

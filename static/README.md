@@ -12,11 +12,11 @@ static/
 ├── css/styles.css      built by Tailwind — committed, do not edit by hand
 ├── src/input.css       Tailwind entry + design tokens + the animation system
 ├── src/og-image.html   source of assets/og-image.png (not published)
-├── src/i18n-en.mjs     English strings, build-time only
-├── src/build-en.mjs    generates the English page
-├── src/build-font.py   regenerates the subsetted Inter file (one-off)
+├── src/locales/        one file per language, build-time only
+├── src/build-locale.mjs  generates a translated page
+├── src/build-font.py   regenerates the subsetted font files (one-off)
 ├── js/main.js          all behaviour
-├── assets/             logo, icon sprite, social image, self-hosted Inter
+├── assets/             logo, icon sprite, social image, self-hosted fonts
 ├── check.mjs           consistency checks, run before every deploy
 ├── deploy.mjs          publishes into ../docs
 ├── tailwind.config.js
@@ -39,40 +39,48 @@ build output is part of the repo.
 
 ## How it works
 
-**Languages.** Both versions are **generated at build time and served as
-separate pages**, because a single URL can only ever be indexed in one
-language.
+**Languages.** Every version is **generated at build time and served as its
+own page**, because a single URL can only ever be indexed in one language.
 
 ```
-/          index.html            French — the source you edit
-/en/       docs/en/index.html    English — generated, never edited by hand
+/          index.html    French — the source you edit
+/en/                     English    ┐
+/vi/                     Vietnamese ├ generated, never edited by hand
+/th/                     Thai       ┘
 ```
 
 French is the source of truth and lives in `index.html`. Elements that change
 carry `data-i18n` (text content), `data-i18n-html` (content with markup) or
-`data-i18n-label` (the `aria-label` of a decorative mockup). `src/i18n-en.mjs`
-holds the English counterpart of every key, plus the `<head>` metadata that
-cannot carry an attribute.
+`data-i18n-label` (the `aria-label` of a decorative mockup). Each target
+language is one file under `src/locales/`, exporting `strings` (218 keys),
+`head` (metadata the HTML cannot carry) and `jsonld` (structured-data labels).
+`src/locales/index.mjs` is the registry: URL, `hreflang`, `og:locale`, and the
+font to add when Latin is not enough.
 
-At deploy time, `src/build-en.mjs` substitutes the translations and rewrites
-what belongs to the language: `lang`, `<title>`, description, canonical,
-`og:*`, the JSON-LD, and the language selector — which is a **link to the other
-URL**, not a JavaScript toggle. Nothing is translated in the browser: neither
-dictionary ships. Only the handful of strings JavaScript composes (step
-counters, prices, calculator totals) live in `main.js`, keyed off `<html lang>`.
+At deploy time, `src/build-locale.mjs` substitutes the translations and
+rewrites what belongs to the language: `lang`, `<title>`, description,
+canonical, `og:*`, the JSON-LD, and the language switcher — where the current
+language becomes inert and the others are links. Nothing is translated in the
+browser: no dictionary ships. Only the handful of strings JavaScript composes
+(step counters, prices, calculator totals) live in `main.js`, keyed off
+`<html lang>`.
 
 The substitution is targeted rather than done through an HTML parser. Parsers
 re-serialise the document and drift (self-closing tags rewritten, attributes
-normalised); here only translated text changes, so both pages share the exact
+normalised); here only translated text changes, so every page shares the exact
 same structure. Every key must resolve or the build fails — `npm run check`
-runs the generation in memory before anything is published.
+runs all generations in memory before anything is published.
 
-To change French copy, edit `index.html`. To change English, edit
-`src/i18n-en.mjs`. Both pages carry the same `hreflang` set (`fr`, `en`,
-`x-default`), and the sitemap lists both URLs with their alternates.
+**To add a language**: write `src/locales/<code>.mjs` with the same 218 keys,
+add an entry to the registry, and add its URL to `sitemap.xml` and the
+`hreflang` block of `index.html`. The checks will tell you what is missing.
 
-All local paths are absolute (`/css/…`, `/js/…`, `/assets/…`) so `/en/` resolves
-them from the site root.
+⚠️ **The Vietnamese and Thai copy has not been reviewed by a native speaker.**
+It was produced by a language model. The meaning should be sound, the idiom may
+not be. Have it read before treating those pages as published marketing.
+
+All local paths are absolute (`/css/…`, `/js/…`, `/assets/…`) so the
+sub-directories resolve them from the site root.
 
 **Icons.** `assets/icons.svg` is a sprite of the 41 [lucide](https://lucide.dev)
 icons the page uses (ISC licensed), inlined into `index.html` at assembly time.
@@ -98,12 +106,27 @@ Anything that starts invisible is scoped under `.js-on` (added by `main.js` on
 boot), so the page still reads correctly with JavaScript disabled.
 `prefers-reduced-motion` disables the lot.
 
-**Font.** Inter is self-hosted: `assets/inter-latin-var.woff2`, 42 KB, latin
-subset with the `wght` axis narrowed to 400–700 and `opsz` kept so
-`font-optical-sizing` still works. Freezing `opsz` would take it to 28 KB but
-widens text by 6.4 %, which reflows the page — measured, not assumed. No
-request leaves for Google, which also settles the GDPR question. Regenerate
-with `src/build-font.py`; licence in `assets/inter-LICENSE.txt` (SIL OFL 1.1).
+**Fonts.** Three self-hosted files, none of which leaves for Google:
+
+| File | Size | Loaded |
+| --- | --- | --- |
+| `inter-latin.woff2` | 42 KB | every page |
+| `inter-vietnamese.woff2` | 10 KB | only where those characters appear |
+| `noto-sans-thai.woff2` | 14 KB | only on `/th/` |
+
+The last two carry a `unicode-range`, so the browser fetches them on demand —
+verified: `/` and `/en/` download the Latin subset alone. Inter has **no Thai
+glyphs at all**, hence the second family; it stays first in the stack so Latin,
+digits and `€` keep rendering in Inter on `/th/`.
+
+Each is subsetted with the `wght` axis narrowed to 400–700 and `opsz` kept, so
+`font-optical-sizing` still works. Freezing `opsz` would save 15 KB but widens
+text by 6.4 %, which reflows the page — measured, not assumed. Regenerate with
+`src/build-font.py`; licences sit next to the files in `assets/`.
+
+Thai stacks diacritics above and below the baseline, so `html[lang='th']`
+relaxes the tight display line-heights and drops the negative letter-spacing,
+which is tuned for Latin.
 
 Note that `font-feature-settings: 'cv02'…` in `src/input.css` is inert: neither
 Google's build nor our subset ships `cv01`–`cv13`. It is kept as a record of
