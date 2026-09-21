@@ -4,10 +4,14 @@
 
   document.documentElement.classList.add('js-on');
 
-  // Les deux versions linguistiques sont générées au build : la page qu'on
+  var DYN_LANGS = ['fr', 'en', 'vi', 'th'];
+
+  // Les versions linguistiques sont générées au build : la page qu'on
   // sert est déjà dans la bonne langue. Il ne reste au runtime que les
   // chaînes composées (compteurs, prix, totaux), que le DOM ne peut pas porter.
-  var lang = document.documentElement.lang === 'en' ? 'en' : 'fr';
+  var lang = DYN_LANGS.indexOf(document.documentElement.lang) >= 0
+    ? document.documentElement.lang
+    : 'fr';
 
   var $ = function (sel, root) {
     return (root || document).querySelector(sel);
@@ -55,6 +59,34 @@
       perUser: 'mo/user',
       perMonth: 'mo',
       perYear: 'year per user',
+    },
+    vi: {
+      greeting: 'Chào Christophe, đây là những việc ưu tiên của bạn hôm nay.',
+      stepCounter: function (n, total) {
+        return 'Bước ' + n + ' / ' + total;
+      },
+      instead: function (price) {
+        return 'Thay vì €' + price + '/tháng';
+      },
+      entMonthly: 'từ 1.200',
+      entAnnual: 'Theo báo giá',
+      perUser: 'tháng/người dùng',
+      perMonth: 'tháng',
+      perYear: 'năm mỗi người dùng',
+    },
+    th: {
+      greeting: 'สวัสดี Christophe นี่คือสิ่งที่ควรลงมือทำก่อนสำหรับวันนี้',
+      stepCounter: function (n, total) {
+        return 'ขั้นที่ ' + n + ' จาก ' + total;
+      },
+      instead: function (price) {
+        return 'จากเดิม €' + price + '/เดือน';
+      },
+      entMonthly: 'เริ่มต้น 1,200',
+      entAnnual: 'ตามใบเสนอราคา',
+      perUser: 'เดือน/ผู้ใช้',
+      perMonth: 'เดือน',
+      perYear: 'ปี ต่อผู้ใช้',
     },
   };
 

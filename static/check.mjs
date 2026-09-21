@@ -13,8 +13,8 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildEnglish } from './src/build-en.mjs';
-import { strings, head } from './src/i18n-en.mjs';
+import { buildLocale } from './src/build-locale.mjs';
+import { TARGETS, ALL } from './src/locales/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const html = readFileSync(join(here, 'index.html'), 'utf8');
@@ -149,42 +149,62 @@ const css = readFileSync(join(here, 'css', 'styles.css'), 'utf8');
 const externalFonts = [html, css].some((f) => /fonts\.(googleapis|gstatic)\.com/.test(f));
 ok("aucune requête de police vers Google", !externalFonts);
 
-const srcMatch = css.match(/@font-face\{[^}]*src:url\(([^)]+)\)/);
-ok('le @font-face déclare une source', !!srcMatch);
-if (srcMatch) {
-  const rel = srcMatch[1].replace(/^['"]|['"]$/g, '').replace(/^\.\.\//, '');
+const fontSrcs = [...css.matchAll(/@font-face\{[^}]*?src:url\(([^)]+)\)/g)].map((m) =>
+  m[1].replace(/^['"]|['"]$/g, '').replace(/^\.\.\//, '')
+);
+ok('le CSS déclare une police par écriture', fontSrcs.length === 3, `${fontSrcs.length} face(s)`);
+for (const rel of fontSrcs) {
   let exists = true;
   try {
     readFileSync(join(here, rel));
   } catch {
     exists = false;
   }
-  ok('le fichier de police déclaré existe', exists, rel);
+  ok(`la police déclarée existe : ${rel.replace('assets/', '')}`, exists);
 }
 
 /* ------------------------------------------------------------------ *
- * 3. Version anglaise : la génération doit aboutir sans trou
+ * 3. Versions traduites : chaque génération doit aboutir sans trou
  * ------------------------------------------------------------------ */
 
-const { applied, problems } = buildEnglish(html, strings, head);
-ok('la page anglaise se génère sans problème', problems.length === 0, problems.slice(0, 3).join(' | '));
-ok('toutes les clés du HTML sont appliquées', applied.size > 0, `${applied.size} clés`);
+for (const locale of TARGETS) {
+  const { applied, problems } = buildLocale(html, locale);
+  ok(`la page « ${locale.code} » se génère sans problème`, problems.length === 0, problems.slice(0, 2).join(' | '));
+  ok(`« ${locale.code} » : toutes les clés appliquées`, applied.size === new Set(
+    [...html.matchAll(/data-i18n(?:-html|-label)?="([^"]+)"/g)].map((m) => m[1])
+  ).size, `${applied.size} clés`);
+}
 
-// hreflang : chaque page doit déclarer l'ensemble complet, y compris elle-même.
+// Chaque langue doit avoir son aperçu social, aux bonnes dimensions : une
+// balise og:image pointant vers un 404 ne se voit qu'au premier partage.
+for (const locale of ALL) {
+  const rel = `assets/og-image-${locale.code}.png`;
+  let dims = null;
+  try {
+    const buf = readFileSync(join(here, rel));
+    dims = [buf.readUInt32BE(16), buf.readUInt32BE(20)];
+  } catch {
+    /* absent */
+  }
+  ok(`aperçu social « ${locale.code} » en 1200x630`, dims?.[0] === 1200 && dims?.[1] === 630, dims ? dims.join('x') : 'fichier absent');
+}
+
+// hreflang : chaque page déclare l'ensemble complet, elle-même comprise.
 const hre = [...html.matchAll(/hreflang="([\w-]+)" href="([^"]+)"/g)].map((m) => m[1]);
-ok('la page déclare fr, en et x-default', ['fr', 'en', 'x-default'].every((h) => hre.includes(h)), hre.join(', '));
+const expected = [...ALL.map((l) => l.hreflang), 'x-default'];
+ok('la page déclare toutes les langues et x-default', expected.every((h) => hre.includes(h)), hre.join(', '));
 
 const sitemap = readFileSync(join(here, 'sitemap.xml'), 'utf8');
 const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-ok('le sitemap liste les deux langues', locs.length === 2 && locs.includes('https://saksae.com/en/'), locs.join(', '));
+ok('le sitemap liste toutes les langues', locs.length === ALL.length, locs.join(', '));
 const altCount = (sitemap.match(/xhtml:link/g) || []).length;
-ok('le sitemap déclare 3 alternatives par URL', altCount === locs.length * 3, `${altCount} déclarations`);
+ok('le sitemap déclare une alternative par langue et par URL', altCount === locs.length * expected.length, `${altCount} déclarations`);
 
 /* ------------------------------------------------------------------ *
  * 5. Traductions : couverture dans les deux sens
  * ------------------------------------------------------------------ */
 
-const EN = strings;
+const EN = TARGETS[0].module.strings;
 const keys = [...new Set([...html.matchAll(/data-i18n(?:-html|-label)?="([^"]+)"/g)].map((m) => m[1]))];
 const missing = keys.filter((k) => !(k in EN));
 const unused = Object.keys(EN).filter((k) => !keys.includes(k));

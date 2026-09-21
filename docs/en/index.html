@@ -12,6 +12,8 @@
     <link rel="canonical" href="https://saksae.com/en/" />
     <link rel="alternate" hreflang="fr" href="https://saksae.com/" />
     <link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
+    <link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
+    <link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
     <link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
     <link rel="icon" type="image/svg+xml" href="/assets/logo-saksae.svg" />
     <link rel="apple-touch-icon" href="/assets/logo-saksae.png" />
@@ -26,7 +28,9 @@
     <meta property="og:url" content="https://saksae.com/en/" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="fr_FR" />
-    <meta property="og:image" content="https://saksae.com/assets/og-image.png" />
+    <meta property="og:locale:alternate" content="vi_VN" />
+    <meta property="og:locale:alternate" content="th_TH" />
+    <meta property="og:image" content="https://saksae.com/assets/og-image-en.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
@@ -34,7 +38,7 @@
       content="SAKSAE — The #1 AI Business platform for Freelancers & SMEs"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://saksae.com/assets/og-image.png" />
+    <meta name="twitter:image" content="https://saksae.com/assets/og-image-en.png" />
 
     <!-- Police auto-hébergée : plus aucune requête vers Google depuis le
          navigateur du visiteur. Le preload la fait partir en parallèle de la
@@ -44,7 +48,7 @@
       rel="preload"
       as="font"
       type="font/woff2"
-      href="/assets/inter-latin-var.woff2"
+      href="/assets/inter-latin.woff2"
       crossorigin
     />
     <link rel="stylesheet" href="/css/styles.css" />
@@ -246,15 +250,12 @@
           </nav>
 
           <div class="hidden md:flex items-center gap-2">
-            <a
-              href="/"
-              hreflang="fr"
-              data-lang-link
-              aria-label="Passer en français"
-              class="px-2.5 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#52525B] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium"
-            >
-              fr
-            </a>
+            <nav data-lang-switcher aria-label="Langue" class="flex items-center gap-0.5">
+              <a href="/" hreflang="fr" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="Passer en français">fr</a>
+              <span data-lang-current="en" aria-current="true" class="px-2 py-1.5 text-[11px] text-[#0A0A0A] uppercase tracking-[0.08em] font-semibold">en</span>
+              <a href="/vi/" hreflang="vi" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="Chuyển sang tiếng Việt">vi</a>
+              <a href="/th/" hreflang="th" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="เปลี่ยนเป็นภาษาไทย">th</a>
+            </nav>
           </div>
 
           <button
@@ -277,15 +278,12 @@
               <a href="#ai-tools" class="py-2.5 text-[14px] text-[#52525B]" data-i18n="nav.tools">AI Tools</a>
               <a href="#pricing" class="py-2.5 text-[14px] text-[#52525B]" data-i18n="nav.pricing">Pricing</a>
               <div class="flex items-center gap-4 pt-4 mt-2 border-t border-[#E4E4E7]/60">
-                <a
-                  href="/"
-                  hreflang="fr"
-                  data-lang-link
-                  aria-label="Passer en français"
-                  class="text-[11px] text-[#6E6E77] uppercase tracking-wider font-medium"
-                >
-                  fr
-                </a>
+                <nav data-lang-switcher aria-label="Langue" class="flex items-center gap-0.5">
+                  <a href="/" hreflang="fr" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="Passer en français">fr</a>
+                  <span data-lang-current="en" aria-current="true" class="px-2 py-1.5 text-[11px] text-[#0A0A0A] uppercase tracking-[0.08em] font-semibold">en</span>
+                  <a href="/vi/" hreflang="vi" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="Chuyển sang tiếng Việt">vi</a>
+                  <a href="/th/" hreflang="th" class="px-2 py-1.5 text-[11px] text-[#6E6E77] hover:text-[#0A0A0A] transition-colors duration-[180ms] uppercase tracking-[0.08em] font-medium" aria-label="เปลี่ยนเป็นภาษาไทย">th</a>
+                </nav>
               </div>
             </div>
           </div>

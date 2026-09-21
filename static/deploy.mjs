@@ -12,8 +12,8 @@ import { cp, mkdir, rm, readdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildEnglish } from './src/build-en.mjs';
-import { strings, head } from './src/i18n-en.mjs';
+import { buildLocale } from './src/build-locale.mjs';
+import { TARGETS } from './src/locales/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const docs = join(here, '..', 'docs');
@@ -36,20 +36,22 @@ for (const entry of PUBLISH) {
   await cp(join(here, entry), join(docs, entry), { recursive: true });
 }
 
-// La version anglaise est générée, pas maintenue à la main : le français
-// reste la source unique. Sans URL propre, elle serait invisible des moteurs.
+// Les traductions sont générées, pas maintenues à la main : le français reste
+// la source unique. Sans URL propre, aucune ne serait indexable.
 const fr = await readFile(join(here, 'index.html'), 'utf8');
-const { html: en, applied, problems } = buildEnglish(fr, strings, head);
-if (problems.length) {
-  console.error('génération de la page anglaise : échec');
-  problems.forEach((p) => console.error(`  - ${p}`));
-  process.exit(1);
+for (const locale of TARGETS) {
+  const { html, applied, problems } = buildLocale(fr, locale);
+  if (problems.length) {
+    console.error(`génération de la page « ${locale.code} » : échec`);
+    problems.forEach((p) => console.error(`  - ${p}`));
+    process.exit(1);
+  }
+  const dir = join(docs, locale.path.replace(/^\/|\/$/g, ''));
+  await mkdir(dir, { recursive: true });
+  await writeFile(join(dir, 'index.html'), html);
+  const n = [...applied.values()].reduce((a, b) => a + b, 0);
+  console.log(`${locale.path}index.html : ${applied.size} clés, ${n} substitutions`);
 }
-await mkdir(join(docs, 'en'), { recursive: true });
-await writeFile(join(docs, 'en', 'index.html'), en);
-
-const substitutions = [...applied.values()].reduce((a, b) => a + b, 0);
-console.log(`en/index.html : ${applied.size} clés, ${substitutions} substitutions`);
 
 const listed = (await readdir(docs)).sort();
 console.log(`published to docs/: ${listed.join(', ')}`);
