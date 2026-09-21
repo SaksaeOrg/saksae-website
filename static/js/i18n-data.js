@@ -251,6 +251,41 @@ window.SAKSAE_EN = {
   'testimonial.q2': 'I instantly got the feeling this was',
   'testimonial.q3': 'the next generation of business."',
 
+  // Libellés des maquettes décoratives (aria-label, voir data-i18n-label)
+  'mock.sidebar':
+    'Preview of SAKSAE navigation: CRM, services, products, management, finance, team and AI centres',
+  'mock.platform.crm':
+    'Preview of the SAKSAE interface: dashboard with revenue, pipeline value, client and staff counts',
+  'mock.platform.services':
+    'Preview of the SAKSAE interface: list of missions with client, dates and status',
+  'mock.platform.produits':
+    'Preview of the SAKSAE interface: catalogue of six products with type, stock and price',
+  'mock.platform.management':
+    'Preview of the SAKSAE interface: project kanban split into To do, In progress and Done',
+  'mock.platform.finance':
+    'Preview of the SAKSAE interface: invoicing overview with receipts, overdue invoices and recent invoices',
+  'mock.platform.equipe':
+    'Preview of the SAKSAE interface: list of team members with role, department and status',
+  'mock.tools.reunion':
+    'Illustration: meeting transcript, detected action and AI-generated summary',
+  'mock.tools.projet':
+    'Illustration: project progress by phase, from research to testing',
+  'mock.tools.calendrier':
+    'Illustration: a day of four meetings, two of them prepared by AI',
+  'mock.tools.playbook':
+    'Illustration: playbook in progress, three of four steps complete',
+  'mock.tools.paie':
+    'Illustration: payslips with automatic calculations, compliance and secure delivery',
+  'mock.tools.contrats': 'Illustration: contract management with a renewal alert',
+  'mock.tools.signatures': 'Illustration: electronic signature and last signed contract',
+  'mock.onb.0': 'Illustration: four data sources to import and a progress bar',
+  'mock.onb.1':
+    'Illustration: three connected tools — Gmail, Google Calendar and contacts',
+  'mock.onb.2':
+    'Illustration: enrichment in progress, 2,847 contacts and 423 companies',
+  'mock.onb.3':
+    'Illustration: four matches detected between your data and SAKSAE modules',
+
   'footer.tagline': 'The AI Business Execution platform for Freelancers and SMEs.',
   'footer.product': 'Product',
   'footer.company': 'Company',

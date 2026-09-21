@@ -82,7 +82,7 @@ plus text, so this halves the file with no visible loss).
 node -e "
 const fs=require('fs'),h=fs.readFileSync('index.html','utf8');
 global.window={};eval(fs.readFileSync('js/i18n-data.js','utf8'));
-const k=[...new Set([...h.matchAll(/data-i18n(?:-html)?=\"([^\"]+)\"/g)].map(m=>m[1]))];
+const k=[...new Set([...h.matchAll(/data-i18n(?:-html|-label)?=\"([^\"]+)\"/g)].map(m=>m[1]))];
 console.log('missing EN:',k.filter(x=>!(x in window.SAKSAE_EN)));
 console.log('unused EN:',Object.keys(window.SAKSAE_EN).filter(x=>!k.includes(x)));"
 
