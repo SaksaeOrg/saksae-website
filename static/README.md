@@ -12,9 +12,10 @@ static/
 ├── css/styles.css      built by Tailwind — committed, do not edit by hand
 ├── src/input.css       Tailwind entry + design tokens + the animation system
 ├── src/og-image.html   source of assets/og-image.png (not published)
+├── src/build-font.py   regenerates the subsetted Inter file (one-off)
 ├── js/i18n-data.js     English strings (French lives in index.html)
 ├── js/main.js          all behaviour
-├── assets/             logo, icon sprite, social preview image
+├── assets/             logo, icon sprite, social image, self-hosted Inter
 ├── check.mjs           consistency checks, run before every deploy
 ├── deploy.mjs          publishes into ../docs
 ├── tailwind.config.js
@@ -69,6 +70,18 @@ without overshoot. Everything else matches the original timings.
 Anything that starts invisible is scoped under `.js-on` (added by `main.js` on
 boot), so the page still reads correctly with JavaScript disabled.
 `prefers-reduced-motion` disables the lot.
+
+**Font.** Inter is self-hosted: `assets/inter-latin-var.woff2`, 42 KB, latin
+subset with the `wght` axis narrowed to 400–700 and `opsz` kept so
+`font-optical-sizing` still works. Freezing `opsz` would take it to 28 KB but
+widens text by 6.4 %, which reflows the page — measured, not assumed. No
+request leaves for Google, which also settles the GDPR question. Regenerate
+with `src/build-font.py`; licence in `assets/inter-LICENSE.txt` (SIL OFL 1.1).
+
+Note that `font-feature-settings: 'cv02'…` in `src/input.css` is inert: neither
+Google's build nor our subset ships `cv01`–`cv13`. It is kept as a record of
+intent — switching to the upstream Inter release would activate it and change
+the rendering.
 
 **Social preview.** `assets/og-image.png` (1200×630) is what LinkedIn, Slack
 and X display. Its source is `src/og-image.html`, which reuses the page's own
