@@ -27,6 +27,7 @@
      ==================================================================== */
 
   var frSnapshot = new Map();
+  var frLabels = new Map();
 
   function snapshotFrench() {
     $$('[data-i18n]').forEach(function (el) {
@@ -34,6 +35,11 @@
     });
     $$('[data-i18n-html]').forEach(function (el) {
       frSnapshot.set(el, el.innerHTML);
+    });
+    // Les aria-label des maquettes décoratives vivent dans l'attribut, pas
+    // dans le contenu : ils ont leur propre instantané.
+    $$('[data-i18n-label]').forEach(function (el) {
+      frLabels.set(el, el.getAttribute('aria-label'));
     });
   }
 
@@ -54,6 +60,14 @@
     $$('[data-i18n-html]').forEach(function (el) {
       var key = el.getAttribute('data-i18n-html');
       el.innerHTML = lang === 'en' && EN[key] != null ? EN[key] : frSnapshot.get(el);
+    });
+
+    $$('[data-i18n-label]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-label');
+      el.setAttribute(
+        'aria-label',
+        lang === 'en' && EN[key] != null ? EN[key] : frLabels.get(el)
+      );
     });
 
     $$('[data-lang-toggle]').forEach(function (btn) {
@@ -225,6 +239,21 @@
      Header
      ==================================================================== */
 
+  /**
+   * Les maquettes produit portent role="img" et un aria-label : elles doivent
+   * s'annoncer comme une seule illustration. La spec ARIA prévoit que role="img"
+   * rende ses descendants présentationnels, mais Chrome ne l'applique pas —
+   * vérifié : le contenu interne reste exposé. On masque donc explicitement les
+   * enfants, le libellé restant porté par le parent.
+   */
+  function hideDecorativeSubtrees() {
+    $$('[role="img"][data-i18n-label]').forEach(function (el) {
+      Array.prototype.forEach.call(el.children, function (child) {
+        child.setAttribute('aria-hidden', 'true');
+      });
+    });
+  }
+
   function initHeader() {
     var toggle = $('#mobile-menu-toggle');
     var menu = $('#mobile-menu');
@@ -242,6 +271,14 @@
     });
     menu.addEventListener('click', function (event) {
       if (event.target.closest('a')) setOpen(false);
+    });
+
+    $$('[data-i18n-label]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-label');
+      el.setAttribute(
+        'aria-label',
+        lang === 'en' && EN[key] != null ? EN[key] : frLabels.get(el)
+      );
     });
 
     $$('[data-lang-toggle]').forEach(function (btn) {
@@ -317,7 +354,7 @@
   function initPlatform() {
     initTabs('platform', {
       active: 'text-[#0A0A0A] font-semibold',
-      inactive: 'text-[#A1A1AA] hover:text-[#52525B]',
+      inactive: 'text-[#6E6E77] hover:text-[#52525B]',
       duration: 200,
       onSelect: function (key) {
         var wanted = PLATFORM_ACTIVE_ITEM[key];
@@ -366,8 +403,8 @@
         } else {
           swapClasses(
             btn,
-            on ? 'text-[#9CA3AF]' : 'text-[#0A0A0A] font-medium',
-            on ? 'text-[#0A0A0A] font-medium' : 'text-[#9CA3AF]'
+            on ? 'text-[#6B7280]' : 'text-[#0A0A0A] font-medium',
+            on ? 'text-[#0A0A0A] font-medium' : 'text-[#6B7280]'
           );
         }
       });
@@ -398,7 +435,7 @@
   function initTools() {
     initTabs('tools', {
       active: 'text-[#0A0A0A]',
-      inactive: 'text-[#A1A1AA] hover:text-[#52525B]',
+      inactive: 'text-[#6E6E77] hover:text-[#52525B]',
       duration: 250,
     });
   }
@@ -493,7 +530,7 @@
 
   var annual = true;
   var BILL_ON = 'bg-white text-[#0A0A0A] shadow-[0_1px_2px_rgba(0,0,0,0.05)]';
-  var BILL_OFF = 'text-[#A1A1AA] hover:text-[#52525B]';
+  var BILL_OFF = 'text-[#6E6E77] hover:text-[#52525B]';
 
   function renderPricing() {
     var toggle = $('#billing-toggle');
@@ -665,6 +702,7 @@
     var year = $('#footer-year');
     if (year) year.textContent = String(new Date().getFullYear());
 
+    hideDecorativeSubtrees();
     initHeader();
     initReveals();
     initPanelGroups();
