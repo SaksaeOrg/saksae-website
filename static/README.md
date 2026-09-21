@@ -86,8 +86,7 @@ console.log('missing icons:',[...new Set([...h.matchAll(/<use href=\"#(i-[a-z0-9
 ## Deploying
 
 GitHub Pages only accepts `/` or `/docs` as a source directory, so `static/` is
-where you edit and `docs/` is what gets served — the same split the React app
-used with `BUILD_PATH=../docs`.
+where you edit and `docs/` is what gets served.
 
 ```sh
 npm run deploy     # rebuilds css, then rewrites ../docs
