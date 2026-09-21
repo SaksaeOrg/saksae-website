@@ -39,6 +39,152 @@
       href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,450;14..32,500;14..32,600;14..32,700&display=swap"
     />
     <link rel="stylesheet" href="css/styles.css" />
+
+    <!--
+      Données structurées. Les tarifs sont dupliqués depuis la section [05] :
+      `npm run check` échoue s'ils divergent des attributs data-monthly /
+      data-annual et de SAKSAE_DYN, et `npm run deploy` passe par ce contrôle.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://saksae.com/#organization",
+            "name": "SAKSAE",
+            "url": "https://saksae.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://saksae.com/assets/logo-saksae.png",
+              "width": 555,
+              "height": 450
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://saksae.com/#website",
+            "url": "https://saksae.com/",
+            "name": "SAKSAE",
+            "inLanguage": "fr-FR",
+            "publisher": { "@id": "https://saksae.com/#organization" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://saksae.com/#software",
+            "name": "SAKSAE",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "url": "https://saksae.com/",
+            "inLanguage": "fr-FR",
+            "publisher": { "@id": "https://saksae.com/#organization" },
+            "description": "SAKSAE centralise vos outils, analyse vos données d'opérations et de revenus, et les transforme en actions. La plateforme d'Exécution Business IA pour Indépendants, TPE et PME.",
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "EUR",
+              "lowPrice": "79",
+              "highPrice": "1200",
+              "offerCount": 4,
+              "offers": [
+                {
+                  "@type": "Offer",
+                  "name": "Indépendant",
+                  "category": "1 utilisateur",
+                  "url": "https://saksae.com/#pricing",
+                  "priceCurrency": "EUR",
+                  "price": "79",
+                  "priceSpecification": [
+                    {
+                      "@type": "UnitPriceSpecification",
+                      "name": "Facturation annuelle",
+                      "price": "79",
+                      "priceCurrency": "EUR",
+                      "unitText": "mois",
+                      "billingDuration": 12
+                    },
+                    {
+                      "@type": "UnitPriceSpecification",
+                      "name": "Facturation mensuelle",
+                      "price": "99",
+                      "priceCurrency": "EUR",
+                      "unitText": "mois",
+                      "billingDuration": 1
+                    }
+                  ]
+                },
+                {
+                  "@type": "Offer",
+                  "name": "Équipe",
+                  "category": "2 à 9 utilisateurs",
+                  "url": "https://saksae.com/#pricing",
+                  "priceCurrency": "EUR",
+                  "price": "279",
+                  "priceSpecification": [
+                    {
+                      "@type": "UnitPriceSpecification",
+                      "name": "Facturation annuelle",
+                      "price": "279",
+                      "priceCurrency": "EUR",
+                      "unitText": "mois",
+                      "billingDuration": 12
+                    },
+                    {
+                      "@type": "UnitPriceSpecification",
+                      "name": "Facturation mensuelle",
+                      "price": "349",
+                      "priceCurrency": "EUR",
+                      "unitText": "mois",
+                      "billingDuration": 1
+                    }
+                  ]
+                },
+                {
+                  "@type": "Offer",
+                  "name": "Croissance",
+                  "category": "10 à 20 utilisateurs",
+                  "url": "https://saksae.com/#pricing",
+                  "priceCurrency": "EUR",
+                  "price": "599",
+                  "priceSpecification": [
+                    {
+                      "@type": "UnitPriceSpecification",
+                      "name": "Facturation annuelle",
+                      "price": "599",
+                      "priceCurrency": "EUR",
+                      "unitText": "mois",
+                      "billingDuration": 12
+                    },
+                    {
+                      "@type": "UnitPriceSpecification",
+                      "name": "Facturation mensuelle",
+                      "price": "749",
+                      "priceCurrency": "EUR",
+                      "unitText": "mois",
+                      "billingDuration": 1
+                    }
+                  ]
+                },
+                {
+                  "@type": "Offer",
+                  "name": "Entreprise",
+                  "category": "20+ utilisateurs",
+                  "url": "https://saksae.com/#pricing",
+                  "priceCurrency": "EUR",
+                  "priceSpecification": {
+                    "@type": "UnitPriceSpecification",
+                    "name": "Facturation mensuelle, à partir de",
+                    "minPrice": "1200",
+                    "priceCurrency": "EUR",
+                    "unitText": "mois",
+                    "billingDuration": 1
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <!-- Icon sprite (lucide, ISC) -->

@@ -7,7 +7,8 @@
     "build": "tailwindcss -i ./src/input.css -o ./css/styles.css --minify",
     "dev": "tailwindcss -i ./src/input.css -o ./css/styles.css --watch",
     "serve": "python3 -m http.server 8080",
-    "deploy": "npm run build && node deploy.mjs"
+    "deploy": "npm run build && npm run check && node deploy.mjs",
+    "check": "node check.mjs"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.19"
