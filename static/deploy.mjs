@@ -18,7 +18,7 @@ const docs = join(here, '..', 'docs');
 
 // Published at the site root. Source files (src/, *.config.js, package.json,
 // deploy.mjs, README) deliberately stay behind.
-const PUBLISH = ['index.html', 'CNAME', 'css', 'js', 'assets'];
+const PUBLISH = ['index.html', 'robots.txt', 'sitemap.xml', 'CNAME', 'css', 'js', 'assets'];
 
 if (!existsSync(join(here, 'css', 'styles.css'))) {
   console.error('css/styles.css is missing — run `npm run build` first.');
