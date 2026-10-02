@@ -15,6 +15,7 @@ export const strings = {
   'nav.platform': 'Platform',
   'nav.tools': 'AI Tools',
   'nav.pricing': 'Pricing',
+  'nav.login': 'Log in',
 
   'hero.headline':
     'The #1 AI Business platform<br /><span class="text-[#A1A1AA]">for Freelancers &amp; SMEs</span>',
