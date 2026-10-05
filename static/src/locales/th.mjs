@@ -20,6 +20,7 @@ export const strings = {
   'nav.platform': 'แพลตฟอร์ม',
   'nav.tools': 'เครื่องมือ AI',
   'nav.pricing': 'ราคา',
+  'nav.login': 'เข้าสู่ระบบ',
 
   'hero.headline':
     'แพลตฟอร์มธุรกิจ AI อันดับ 1<br /><span class="text-[#A1A1AA]">สำหรับฟรีแลนซ์และธุรกิจ SME</span>',

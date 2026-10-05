@@ -135,9 +135,11 @@ if (ldMatch) {
 // changé sans que toutes les occurrences suivent ; ce contrôle attrape une
 // mise à jour partielle. Il ne dit rien de la validité de l'URL : seule une
 // requête réelle le dirait, et elle n'a pas sa place dans un build.
+// Le lien « Connexion » de l'en-tête mène à l'application, pas à la prise de rendez-vous.
+const LOGIN_URL = 'https://app.saksae.com';
 const booking = [...new Set(
   [...html.matchAll(/href="(https:\/\/(?!saksae\.com)[^"]+)"/g)].map((m) => m[1])
-)];
+)].filter((url) => url !== LOGIN_URL);
 ok('les CTA pointent tous vers la même URL', booking.length === 1, booking.join(', ') || 'aucun');
 ok('plus aucun lien Calendly', !html.includes('calendly.com'));
 
