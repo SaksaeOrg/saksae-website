@@ -53,7 +53,7 @@ own page**, because a single URL can only ever be indexed in one language.
 French is the source of truth and lives in `index.html`. Elements that change
 carry `data-i18n` (text content), `data-i18n-html` (content with markup) or
 `data-i18n-label` (the `aria-label` of a decorative mockup). Each target
-language is one file under `src/locales/`, exporting `strings` (221 keys),
+language is one file under `src/locales/`, exporting `strings` (222 keys),
 `head` (metadata the HTML cannot carry) and `jsonld` (structured-data labels).
 `src/locales/index.mjs` is the registry: URL, `hreflang`, `og:locale`, and the
 font to add when Latin is not enough.
@@ -72,7 +72,7 @@ normalised); here only translated text changes, so every page shares the exact
 same structure. Every key must resolve or the build fails — `npm run check`
 runs all generations in memory before anything is published.
 
-**To add a language**: write `src/locales/<code>.mjs` with the same 221 keys,
+**To add a language**: write `src/locales/<code>.mjs` with the same 222 keys,
 add an entry to the registry, and add its URL to `sitemap.xml` and the
 `hreflang` block of `index.html`. The checks will tell you what is missing.
 

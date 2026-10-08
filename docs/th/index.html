@@ -273,12 +273,21 @@
                 <span data-lang-current="th" aria-current="true" class="flex items-center justify-between gap-3 px-3 py-2 rounded-md text-[13px] text-[#0A0A0A] font-medium">ไทย<svg aria-hidden="true" data-lang-check class="icon w-3.5 h-3.5"><use href="#i-check" /></svg></span>
               </nav>
             </details>
-            <a
-              href="https://app.saksae.com"
-              class="ml-2 px-4 py-2 text-[13px] font-medium bg-[#0A0A0A] text-white rounded-lg transition-all duration-[240ms] ease-out-soft hover:bg-[#171717] active:scale-[0.98]"
-              data-i18n="nav.login"
-              >เข้าสู่ระบบ</a
-            >
+            <div class="ml-2 flex items-center bg-[#0A0A0A] rounded-lg text-[13px] font-medium text-white">
+              <a
+                href="https://app.saksae.com"
+                class="pl-4 pr-1.5 py-2 rounded-l-lg transition-opacity duration-[180ms] hover:opacity-75"
+                data-i18n="nav.login"
+                >เข้าสู่ระบบ</a
+              >
+              <span aria-hidden="true" class="text-white/40">/</span>
+              <a
+                href="https://app.saksae.com/signup"
+                class="pl-1.5 pr-4 py-2 rounded-r-lg transition-opacity duration-[180ms] hover:opacity-75"
+                data-i18n="nav.signup"
+                >สมัครสมาชิก</a
+              >
+            </div>
           </div>
 
           <button
@@ -308,12 +317,11 @@
                   <a href="/vi/" hreflang="vi" lang="vi" class="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-lg border border-[#E4E4E7] text-[14px] text-[#52525B]" aria-label="Chuyển sang tiếng Việt">Tiếng Việt<svg aria-hidden="true" data-lang-check class="icon w-3.5 h-3.5"><use href="#i-check" /></svg></a>
                   <span data-lang-current="th" aria-current="true" class="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-lg border border-[#0A0A0A] text-[14px] text-[#0A0A0A] font-medium">ไทย<svg aria-hidden="true" data-lang-check class="icon w-3.5 h-3.5"><use href="#i-check" /></svg></span>
                 </nav>
-                <a
-                  href="https://app.saksae.com"
-                  class="mt-5 flex justify-center px-4 py-2.5 text-[14px] font-medium bg-[#0A0A0A] text-white rounded-lg"
-                  data-i18n="nav.login"
-                  >เข้าสู่ระบบ</a
-                >
+                <div class="mt-5 flex items-center justify-center bg-[#0A0A0A] rounded-lg text-[14px] font-medium text-white">
+                  <a href="https://app.saksae.com" class="flex-1 text-right pl-4 pr-2 py-2.5" data-i18n="nav.login">เข้าสู่ระบบ</a>
+                  <span aria-hidden="true" class="text-white/40">/</span>
+                  <a href="https://app.saksae.com/signup" class="flex-1 pl-2 pr-4 py-2.5" data-i18n="nav.signup">สมัครสมาชิก</a>
+                </div>
               </div>
             </div>
           </div>

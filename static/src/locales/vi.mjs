@@ -14,6 +14,7 @@ export const strings = {
   'nav.tools': 'Công cụ AI',
   'nav.pricing': 'Bảng giá',
   'nav.login': 'Đăng nhập',
+  'nav.signup': 'Đăng ký',
   'nav.language': 'Ngôn ngữ',
   'nav.langCode': 'VI',
 

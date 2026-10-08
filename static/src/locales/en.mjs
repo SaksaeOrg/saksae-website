@@ -16,6 +16,7 @@ export const strings = {
   'nav.tools': 'AI Tools',
   'nav.pricing': 'Pricing',
   'nav.login': 'Log in',
+  'nav.signup': 'Sign up',
   'nav.language': 'Language',
   'nav.langCode': 'EN',
 

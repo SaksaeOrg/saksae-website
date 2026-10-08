@@ -21,6 +21,7 @@ export const strings = {
   'nav.tools': 'เครื่องมือ AI',
   'nav.pricing': 'ราคา',
   'nav.login': 'เข้าสู่ระบบ',
+  'nav.signup': 'สมัครสมาชิก',
   'nav.language': 'ภาษา',
   'nav.langCode': 'TH',
 
