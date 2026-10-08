@@ -314,6 +314,12 @@ html[lang='th'] {
   animation: header-drop 500ms var(--ease-premium) both;
 }
 
+/* Menu mobile ouvert : l'en-tête translucide laisserait le titre du héros
+   transparaître derrière les liens. Il devient opaque le temps du menu. */
+.intro-header:has(#mobile-menu:not([hidden])) {
+  background-color: #fafafa;
+}
+
 /* ==========================================================================
    Hero ambient layer
    ========================================================================== */
