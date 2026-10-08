@@ -276,6 +276,19 @@
       if (event.target.closest('a')) setOpen(false);
     });
 
+    // Le sélecteur de langue est un <details> : il s'ouvre sans JavaScript.
+    // Ici, seulement ce qu'un menu doit faire en plus — se refermer au clic
+    // extérieur et sur Échap, en rendant le focus au déclencheur.
+    $$('[data-lang-menu]').forEach(function (details) {
+      document.addEventListener('click', function (event) {
+        if (details.open && !details.contains(event.target)) details.open = false;
+      });
+      details.addEventListener('keydown', function (event) {
+        if (event.key !== 'Escape' || !details.open) return;
+        details.open = false;
+        $('summary', details).focus();
+      });
+    });
   }
 
   /* ====================================================================

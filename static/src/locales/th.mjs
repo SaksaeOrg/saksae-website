@@ -21,6 +21,8 @@ export const strings = {
   'nav.tools': 'เครื่องมือ AI',
   'nav.pricing': 'ราคา',
   'nav.login': 'เข้าสู่ระบบ',
+  'nav.language': 'ภาษา',
+  'nav.langCode': 'TH',
 
   'hero.headline':
     'แพลตฟอร์มธุรกิจ AI อันดับ 1<br /><span class="text-[#A1A1AA]">สำหรับฟรีแลนซ์และธุรกิจ SME</span>',

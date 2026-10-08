@@ -14,6 +14,8 @@ export const strings = {
   'nav.tools': 'Công cụ AI',
   'nav.pricing': 'Bảng giá',
   'nav.login': 'Đăng nhập',
+  'nav.language': 'Ngôn ngữ',
+  'nav.langCode': 'VI',
 
   'hero.headline':
     'Nền tảng kinh doanh AI số 1<br /><span class="text-[#A1A1AA]">cho freelancer và doanh nghiệp SME</span>',
