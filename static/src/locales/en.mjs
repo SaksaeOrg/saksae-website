@@ -32,8 +32,7 @@ export const strings = {
   'hero.pop.a3': 'Playbook triggered',
   'hero.pop.a4': 'Brief prepared',
 
-  'cta.demo': 'Schedule a demo',
-  'cta.requestDemo': 'Request a demo',
+  'cta.start': 'Get started',
   'cta.title': 'Ready to transform your business and take action with SAKSAE?',
 
   'platform.tag': '[01] Unified Platform',

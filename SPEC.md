@@ -143,19 +143,24 @@ L'annuel est affiché par défaut, avec 20 % de remise. **Ces montants existent
 `main.js` pour Entreprise, et le JSON-LD. `npm run check` refuse de déployer
 s'ils divergent.
 
-### Prise de rendez-vous
+### Inscription et prise de rendez-vous
+
+Les CTA « Commencer maintenant » (hero, onboarding, CTA final, trois cartes
+tarifs) mènent à l'inscription `https://app.saksae.com/signup`. Les cartes y
+ajoutent `?plan=<code>&cycle=annual|monthly`, que `main.js` réécrit au
+basculement Mensuel/Annuel : l'application présélectionne ce plan à l'étape
+Plan, où le client choisit entre essai de 15 jours, paiement Stripe ou démo.
+
+Seule la carte Entreprise mène encore à la prise de rendez-vous :
 
 ```
 https://app.saksae.com/book/org_098ac3a559f8/d%C3%A9mo-saksae
 ```
 
-Sept CTA y mènent. Écrite sous forme percent-encodée : les navigateurs
-encodent d'eux-mêmes, les robots et vérificateurs de liens pas toujours.
-
-Le lien précédent (Calendly) est tombé en 404 sans que personne ne le
-remarque. Un contrôle vérifie maintenant que les sept CTA pointent vers une
-URL unique, **mais rien ne teste que cette URL répond** : à revérifier
-périodiquement.
+Écrite sous forme percent-encodée : les navigateurs encodent d'eux-mêmes, les
+robots et vérificateurs de liens pas toujours. Un contrôle vérifie que tous
+les liens de rendez-vous pointent vers une URL unique, **mais rien ne teste
+que cette URL répond** : à revérifier périodiquement.
 
 ### Prix de référence du calculateur
 

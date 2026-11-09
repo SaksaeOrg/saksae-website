@@ -37,8 +37,7 @@ export const strings = {
   'hero.pop.a3': 'เริ่ม Playbook แล้ว',
   'hero.pop.a4': 'เตรียมสรุปแล้ว',
 
-  'cta.demo': 'นัดชมการสาธิต',
-  'cta.requestDemo': 'ขอชมการสาธิต',
+  'cta.start': 'เริ่มต้นใช้งาน',
   'cta.title': 'พร้อมเปลี่ยนโฉมธุรกิจและลงมือทำด้วย SAKSAE แล้วหรือยัง',
 
   'platform.tag': '[01] แพลตฟอร์มรวมศูนย์',

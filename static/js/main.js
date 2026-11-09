@@ -568,6 +568,11 @@
         var unit = $('[data-i18n="pricing.mo"]', per);
         if (unit) unit.textContent = t().perMonth;
       }
+      var signup = $('[data-signup-plan]', card);
+      if (signup) {
+        signup.href = 'https://app.saksae.com/signup?plan=' + signup.getAttribute('data-signup-plan') +
+          '&cycle=' + (annual ? 'annual' : 'monthly');
+      }
     });
   }
 
