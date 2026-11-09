@@ -30,8 +30,7 @@ export const strings = {
   'hero.pop.a3': 'Playbook được kích hoạt',
   'hero.pop.a4': 'Đã chuẩn bị tóm tắt',
 
-  'cta.demo': 'Đặt lịch demo',
-  'cta.requestDemo': 'Yêu cầu demo',
+  'cta.start': 'Bắt đầu ngay',
   'cta.title': 'Sẵn sàng chuyển đổi doanh nghiệp và hành động cùng SAKSAE?',
 
   'platform.tag': '[01] Nền tảng hợp nhất',
