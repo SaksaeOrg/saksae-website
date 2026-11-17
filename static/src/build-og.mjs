@@ -34,7 +34,7 @@ const THAI_STACK = "'Inter', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont
 const FR_OG = {
   tag: 'Exécution Business IA',
   headline:
-    '#1 plateforme business IA<br /><span class="muted">pour Indépendants, TPE/PME</span>',
+    'La plateforme business IA<br /><span class="muted">pour Indépendants, TPE/PME</span>',
   footer: "Centralisez vos outils, détectez vos priorités, passez à l'action.",
 };
 

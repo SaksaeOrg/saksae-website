@@ -28,7 +28,7 @@ const FR = {
   ogTitle: "SAKSAE — La plateforme d'Exécution Business IA",
   ogDescription:
     "Centralisez vos outils, détectez vos priorités, passez à l'action. Pour Indépendants, TPE et PME.",
-  ogImageAlt: 'SAKSAE — #1 plateforme business IA pour Indépendants, TPE/PME',
+  ogImageAlt: 'SAKSAE — La plateforme business IA pour Indépendants, TPE/PME',
   planNames: ['Indépendant', 'Équipe', 'Croissance', 'Entreprise'],
   planTargets: ['1 utilisateur', '2 à 9 utilisateurs', '10 à 20 utilisateurs', '20+ utilisateurs'],
   billingAnnual: 'Facturation annuelle',
