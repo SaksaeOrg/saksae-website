@@ -35,10 +35,9 @@ direction artistique, affichée dans la couleur d'accent.
 | Ancre | Tag | Rôle |
 |---|---|---|
 | `#platform` | `[01] Plateforme unifiée et actionnable` | Six onglets, maquette d'interface par onglet (CRM, Services, Produits, Management, Admin & Finances, Équipe) |
-| `#onboarding` | `[02] Onboarding intelligent` | Carrousel à rotation automatique, quatre étapes : import, synchronisation, enrichissement, mapping |
+| `#onboarding` | `[02] Onboarding intelligent` | Carrousel à rotation automatique, quatre étapes : import, messagerie, enrichissement, classement |
 | `#ai-tools` | `[03] Outils IA` | Sept onglets outil, plus le modal « calculez vos économies » qui compare une pile d'outils du marché au prix SAKSAE |
 | `#ai` | `[04] Intelligence artificielle` | Fil d'actions à deux colonnes, cartes dépliables avec aperçu d'e-mail. Animation de frappe sur la salutation |
-| `#testimonials` | — | Citation unique, dégradé gris vers noir |
 | `#pricing` | `[05] Tarification` | Quatre formules, bascule mensuel / annuel |
 
 Plus l'en-tête (navigation, sélecteur de langue), le héros (titre, deux
@@ -164,14 +163,16 @@ que cette URL répond** : à revérifier périodiquement.
 
 ### Prix de référence du calculateur
 
-SAKSAE est comparé à 63 €/mois/utilisateur, face à dix outils du marché
-(Zoom 15, Otter.ai 17, Asana 25, Monday 30, Calendly 12, DocuSign 25,
-PandaDoc 35, Notion 10, Slack 12, PayFit 50).
+SAKSAE est comparé à **56 €/mois/utilisateur** : la formule Équipe à
+5 utilisateurs en annuel (279 € / 5), écrit sous le chiffre dans la fenêtre
+(`calc.saksaeNote`). Le chiffre vit dans `SAKSAE_PRICE` (`js/main.js`) et dans
+le texte initial de `#calc-saksae` : à changer ensemble si la grille bouge.
 
-Ce chiffre de 63 € **ne correspond à aucune formule de la grille**. Il tombe
-dans la fourchette par utilisateur d'Équipe (31 à 140 €) et de Croissance
-(30 à 60 €), mais Indépendant est à 79 €. C'est donc un tarif moyen
-d'argumentaire : à assumer comme tel, ou à aligner sur une formule.
+Huit outils du marché sont proposés : Zoom 15, Otter.ai 17, Asana 25,
+Monday 30, Calendly 12, DocuSign 25, PandaDoc 35, Notion 10. **Slack et PayFit
+ont été retirés le 17/11/2026** : SAKSAE n'a ni messagerie d'équipe ni calcul
+de paie, il ne les remplace donc pas. Jusqu'à cette date, le prix de référence
+était un « 63 € » qui ne correspondait à aucune formule.
 
 ---
 
@@ -179,12 +180,31 @@ d'argumentaire : à assumer comme tel, ou à aligner sur une formule.
 
 Trois choses à savoir avant de considérer la page comme finie.
 
-**Le témoignage est vraisemblablement du remplissage.** « Marie Dupont,
-CEO · TechStart » : le même nom sert de collaboratrice fictive dans la
-maquette Équipe, « TechStart » apparaît dans les fausses factures, l'avatar
-est un dégradé gris. Un témoignage nominatif inventé sur un site commercial
-relève de la pratique commerciale trompeuse. À remplacer par un vrai, ou à
-retirer.
+**Chaque fonction annoncée doit exister dans l'application.** Le texte d'origine
+venait d'un générateur de site (avril 2026) et promettait des fonctions
+absentes. Retiré le 17/11/2026, à ne pas réintroduire tant que l'application ne
+les a pas :
+
+| Promesse retirée | Réalité du produit |
+| --- | --- |
+| « #1 plateforme business IA » | Classement invérifiable : « La plateforme business IA » |
+| Signature « légale eIDAS » | Signature électronique simple : code par e-mail, ordre des signataires, certificat de preuve |
+| Paie « calculs conformes », « génération des fiches de paie » | Préparation des variables pour le cabinet, diffusion des bulletins ; aucun calcul |
+| Connexions Salesforce, HubSpot, Google Sheets, API | Import Excel et CSV ; messagerie Gmail, Outlook ou SMTP pour l'envoi |
+| « Google Calendar synced », « Sync multi-calendriers » | Aucune synchronisation d'agenda (spécifiée : SaksaeOrg/Saksae#1018) |
+| « Mapping IA », « Organisation détectée par l'IA » | Correspondance des colonnes par synonymes, sans IA |
+| « Transcription en temps réel » | Transcription après la réunion |
+| « Suivi du temps automatique », « Rapports automatisés » | Temps saisi à la main ; pas de rapport de projet |
+| « Planification automatique », « Suggestions IA » de l'agenda | Pages de réservation, rappels, compte rendu et suivi par IA |
+| Playbooks : « déclencheurs », « actions automatisées » | Modèles de projet créés en un clic ; aucun moteur d'automatisation |
+| « Playbook déclenché », « Action exécutée », « Partagé sur votre calendrier » | L'IA prépare et propose, l'utilisateur valide |
+| Rentabilité « par collaborateur » | Par client et par mission (spécifiée : SaksaeOrg/Saksae#1020) |
+| « Tous les outils inclus » | Les formules diffèrent : « un prix fixe par tranche d'utilisateurs » |
+| « Workflows internes », « Intégrations avancées » | « Circuits de validation », « Intégrations sur mesure » |
+| Témoignage « Marie Dupont, CEO · TechStart » | Inventé : section retirée, à remettre seulement avec un vrai client qui l'autorise |
+
+Marie Dupont reste dans la maquette Équipe, comme collaboratrice fictive parmi
+d'autres : c'est de la démonstration, pas un témoignage.
 
 **Les maquettes produit sont en français sur les quatre pages.** Elles n'ont
 jamais porté de clé de traduction. Sur la page thaïe, des captures d'interface
@@ -229,9 +249,9 @@ sémantiques et des attributs de données fonctionnels (`data-tab`,
 ## Questions ouvertes
 
 1. Faire relire le vietnamien et le thaï par des locuteurs natifs.
-2. Trancher sur le témoignage : vrai ou retiré.
+2. Remettre un témoignage le jour où un vrai client l'autorise (retiré le 17/11/2026).
 3. Traduire les maquettes produit, ou assumer le français partout.
-4. Réconcilier le prix de référence de 63 € avec la grille tarifaire.
+4. ~~Réconcilier le prix de référence de 63 € avec la grille tarifaire.~~ Fait le 17/11/2026 : 56 €, formule Équipe à 5 utilisateurs en annuel.
 5. Décider du contraste des badges d'accent — 33 éléments encore sous le seuil.
 6. Fournir les comptes sociaux pour compléter `sameAs` dans les données
    structurées.

@@ -601,10 +601,10 @@
     { name: 'DocuSign', price: 25 },
     { name: 'PandaDoc', price: 35 },
     { name: 'Notion', price: 10 },
-    { name: 'Slack', price: 12 },
-    { name: 'PayFit', price: 50 },
   ];
-  var SAKSAE_PRICE = 63;
+  // Formule Équipe, 5 utilisateurs, en annuel : 279 € / 5 ≈ 56 €.
+  // Slack et PayFit sont retirés : SAKSAE n'a ni messagerie d'équipe ni calcul de paie.
+  var SAKSAE_PRICE = 56;
   var selectedTools = {};
   var TOOL_ON = 'border-[#0A0A0A] bg-[#0A0A0A] text-white';
   var TOOL_OFF = 'border-[#E5E7EB] hover:border-[#0A0A0A]';
