@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Pas de <lastmod> : écrit en dur il serait faux dès la première modification,
-  et Google ignore un lastmod qu'il juge peu fiable.
-
-  Chaque URL déclare l'ensemble complet des alternatives, y compris elle-même :
-  c'est ce que demande la spécification hreflang, et une déclaration
-  non réciproque est ignorée.
--->
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml"
->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://saksae.com/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
     <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
     <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
   </url>
   <url>
     <loc>https://saksae.com/en/</loc>
@@ -25,7 +13,6 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
     <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
     <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
   </url>
   <url>
     <loc>https://saksae.com/vi/</loc>
@@ -33,7 +20,6 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
     <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
     <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
   </url>
   <url>
     <loc>https://saksae.com/th/</loc>
@@ -41,6 +27,229 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/" />
     <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/" />
     <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://saksae.com/" />
+  </url>
+  <url>
+    <loc>https://saksae.com/agences.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/agences.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/agences.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/agences.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/agences.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/en/agences.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/agences.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/agences.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/agences.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/agences.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/vi/agences.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/agences.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/agences.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/agences.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/agences.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/th/agences.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/agences.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/agences.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/agences.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/agences.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/societes-de-services.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/societes-de-services.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/en/societes-de-services.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/societes-de-services.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/vi/societes-de-services.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/societes-de-services.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/th/societes-de-services.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/societes-de-services.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/societes-de-services.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/cabinets-conseil.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/cabinets-conseil.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/en/cabinets-conseil.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/cabinets-conseil.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/vi/cabinets-conseil.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/cabinets-conseil.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/th/cabinets-conseil.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/cabinets-conseil.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/cabinets-conseil.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/organismes-de-formation.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/organismes-de-formation.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/en/organismes-de-formation.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/organismes-de-formation.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/vi/organismes-de-formation.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/organismes-de-formation.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/th/organismes-de-formation.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/organismes-de-formation.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/organismes-de-formation.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/commercants-franchises.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/commercants-franchises.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/en/commercants-franchises.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/commercants-franchises.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/vi/commercants-franchises.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/commercants-franchises.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/th/commercants-franchises.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/commercants-franchises.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/commercants-franchises.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/startups.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/startups.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/startups.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/startups.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/startups.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/en/startups.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/startups.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/startups.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/startups.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/startups.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/vi/startups.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/startups.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/startups.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/startups.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/startups.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/th/startups.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/startups.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/startups.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/startups.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/startups.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/comptables.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/comptables.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/en/comptables.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/comptables.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/vi/comptables.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/comptables.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/th/comptables.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/comptables.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/comptables.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/tarifs.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/tarifs.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/en/tarifs.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/tarifs.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/vi/tarifs.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/tarifs.html" />
+  </url>
+  <url>
+    <loc>https://saksae.com/th/tarifs.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://saksae.com/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://saksae.com/en/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="vi" href="https://saksae.com/vi/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="th" href="https://saksae.com/th/tarifs.html" />
   </url>
 </urlset>

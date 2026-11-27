@@ -1,0 +1,447 @@
+/* Polices auto-hébergées, produites par src/build-font.py.
+   Inter : sous-ensemble latin, axe wght réduit à 400-700, axe opsz conservé
+   pour font-optical-sizing. Le sous-ensemble vietnamien porte son propre
+   unicode-range : il n'est téléchargé que si la page contient ces caractères,
+   donc jamais sur /, /en/ ni /th/.
+   SIL Open Font License 1.1 — voir assets/inter-LICENSE.txt. */
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/inter-latin.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2212, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/inter-vietnamese.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0,
+    U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+
+/* Inter ne contient aucun glyphe thaï. Cette famille n'est déclarée que pour
+   la page /th/, qui seule la précharge.
+   SIL Open Font License 1.1 — voir assets/noto-sans-thai-LICENSE.txt. */
+@font-face {
+  font-family: 'Noto Sans Thai';
+  src: url('../assets/noto-sans-thai.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0E01-0E5B, U+200C-200D, U+25CC;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Refonte 2027 — jetons repris de la plateforme (frontend/src/index.css)
+   Noir et blanc dominants, accents réservés aux données et à la boucle.
+   ========================================================================== */
+
+:root {
+  --ink: #171717;
+  --white: #ffffff;
+  --soft: #f5f5f5;
+  --line: #ebebeb;
+  --text-2: #525252;
+  --muted: #6b6b6b; /* 4,86:1 sur #F5F5F5, 5,3:1 sur blanc */
+  --emerald: #10b981;
+  --emerald-text: #047857;
+  --emerald-bg: #d1fae5;
+  --amber: #fbbf24;
+  --amber-text: #b45309;
+  --amber-bg: #fef3c7;
+  --indigo: #6366f1;
+  --indigo-text: #4f46e5;
+  --indigo-bg: #e0e7ff;
+  --late-text: #b91c1c;
+  --late-bg: #fee2e2;
+  --radius-btn: 8px;
+  --radius-card: 16px;
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-header: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-tab: cubic-bezier(0.32, 0.72, 0, 1);
+  --header-h: 64px;
+  /* Étalonnage commun de toutes les photos : chaud, légèrement désaturé (rendu Qonto) */
+  --photo-grade: saturate(0.78) contrast(1.04) brightness(1.03) sepia(0.12);
+}
+
+@layer base {
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    background: var(--white);
+    color: var(--ink);
+  }
+  h1, h2, h3 { text-wrap: balance; }
+  :focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; border-radius: 4px; }
+  ::selection { background: var(--ink); color: #fff; }
+}
+
+@layer components {
+  /* --- Typographie -------------------------------------------------------- */
+  .t-display { font-size: clamp(2.5rem, 5.2vw, 4rem); line-height: 1.04; letter-spacing: -0.035em; font-weight: 700; }
+  .t-h2 { font-size: clamp(1.875rem, 3.4vw, 2.5rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 700; }
+  .t-h3 { font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.015em; font-weight: 600; }
+  .t-body { font-size: 1.0625rem; line-height: 1.6; color: var(--text-2); }
+  .t-label { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+  /* --- Boutons : rectangles arrondis à 8 px, comme Qonto et la plateforme -- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 44px; padding: 0 18px; border-radius: var(--radius-btn);
+    font-size: 0.9375rem; font-weight: 600; border: 1px solid transparent; white-space: nowrap;
+    transition: transform 180ms var(--ease-premium), box-shadow 180ms var(--ease-premium), background-color 180ms;
+  }
+  .btn-primary { background: var(--ink); color: #fff; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
+  .btn-secondary { background: #fff; color: var(--ink); border-color: var(--line); }
+  .btn-secondary:hover { background: var(--soft); }
+  .btn-on-dark { background: #fff; color: var(--ink); }
+  .btn-link { padding: 0 2px; min-height: 0; color: var(--ink); }
+  .btn-link .arr { transition: transform 180ms var(--ease-premium); }
+  .btn-link:hover .arr { transform: translateX(3px); }
+  .btn-sm { min-height: 36px; padding: 0 14px; font-size: 0.875rem; }
+  .btn-round {
+    width: 44px; height: 44px; border-radius: 999px; border: 1px solid var(--line); background: #fff;
+    display: inline-grid; place-items: center; transition: background-color 180ms;
+  }
+  .btn-round:hover { background: var(--soft); }
+
+  /* --- Badges et cartes d'interface posées sur les photos ----------------- */
+  .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-done { background: var(--emerald-bg); color: var(--emerald-text); }
+  .badge-todo { background: var(--amber-bg); color: var(--amber-text); }
+  .badge-info { background: var(--indigo-bg); color: var(--indigo-text); }
+  .badge-late { background: var(--late-bg); color: var(--late-text); }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px;
+    background: #fff; color: var(--ink); border-radius: var(--radius-btn);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); font-size: 0.8125rem; font-weight: 600; white-space: nowrap;
+  }
+
+  .card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-card); }
+  .card-soft { background: var(--soft); border-radius: var(--radius-card); }
+
+  /* --- Carte « action proposée » ------------------------------------------ */
+  .action-card { padding: 16px; display: grid; gap: 8px; }
+
+  /* --- Header ------------------------------------------------------------- */
+  .site-header {
+    position: sticky; top: 0; z-index: 50; height: var(--header-h);
+    background: rgba(255, 255, 255, 0); border-bottom: 1px solid transparent;
+    transition: background-color 500ms ease-out, border-color 500ms ease-out, transform 250ms var(--ease-header);
+  }
+  .site-header.is-solid { background: #fff; border-bottom-color: var(--line); }
+  .site-header.is-hidden { transform: translateY(-100%); }
+  .nav-trigger { display: inline-flex; align-items: center; gap: 4px; padding: 8px 12px; border-radius: var(--radius-btn); font-size: 0.9375rem; font-weight: 500; }
+  .nav-trigger:hover, .nav-trigger[aria-expanded='true'] { background: var(--soft); }
+  .nav-trigger .chev { transition: transform 240ms var(--ease-premium); }
+  .nav-trigger[aria-expanded='true'] .chev { transform: rotate(180deg); }
+
+  .mega {
+    position: absolute; left: 0; right: 0; top: var(--header-h);
+    background: #fff; border-bottom: 1px solid var(--line); box-shadow: 0 24px 48px rgba(0, 0, 0, 0.06);
+    opacity: 0; transform: translateY(-8px); pointer-events: none;
+    transition: opacity 240ms var(--ease-premium), transform 240ms var(--ease-premium);
+  }
+  .mega.is-open { opacity: 1; transform: none; pointer-events: auto; }
+  .mega-link { display: grid; grid-template-columns: 36px 1fr; gap: 12px; padding: 10px; border-radius: 12px; }
+  .mega-link:hover { background: var(--soft); }
+  .mega-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--soft); display: grid; place-items: center; }
+
+  /* --- Bandeau du hero (mesures relevées sur qonto.com le 26/11/2026) ----- */
+  .marquee { overflow: hidden; pointer-events: none; user-select: none; }
+  .marquee-track { display: flex; width: max-content; gap: 10px; padding-inline: 16px; will-change: transform; }
+  @media (min-width: 768px) { .marquee-track { gap: 40px; padding-inline: 24px; } }
+  .tile { position: relative; flex: none; width: min(75.6vw, 340px); aspect-ratio: 312 / 322; }
+  @media (min-width: 768px) { .tile { width: 312px; } }
+  .tile-frame { position: relative; height: 100%; overflow: hidden; border-radius: 12px; background: var(--soft); }
+  @media (min-width: 768px) { .tile-frame { border-radius: 16px; } }
+  /* Étalonnage commun : toutes les photos semblent venir du même tournage
+     (chaud, légèrement désaturé, contraste doux), comme les visuels Qonto. */
+  .tile-media {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    filter: var(--photo-grade);
+    animation: kenburns 16s ease-in-out infinite alternate;
+  }
+  .tile:nth-child(2n) .tile-media { animation-delay: -6s; }
+  .tile:nth-child(3n) .tile-media { animation-delay: -11s; transform-origin: 30% 70%; }
+  .tile-frame::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(160deg, rgba(255, 214, 170, 0.16), rgba(255, 255, 255, 0) 55%), linear-gradient(0deg, rgba(23, 23, 23, 0.10), rgba(23, 23, 23, 0) 35%);
+  }
+  .tile-dark .tile-frame::after { display: none; }
+
+  /* Carte d'interface posée sur la photo : verre dépoli, comme « City Hotel » chez Qonto */
+  .tile .chip {
+    position: absolute; z-index: 2; left: 14px; right: auto; bottom: 16px; max-width: calc(100% - 28px);
+    padding: 7px 9px 7px 7px; gap: 8px; font-size: 0.78125rem;
+    background: rgba(255, 255, 255, 0.82); -webkit-backdrop-filter: blur(10px) saturate(1.2); backdrop-filter: blur(10px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 30px rgba(23, 23, 23, 0.16);
+    animation: chip-life 8s var(--ease-premium) infinite;
+  }
+  .chip-icon { width: 26px; height: 26px; flex: none; border-radius: 8px; background: #fff; border: 1px solid var(--line); display: grid; place-items: center; color: var(--ink); }
+  .chip-icon svg { width: 16px; height: 16px; }
+  .chip-label { overflow: hidden; text-overflow: ellipsis; }
+  .tile .chip .state-a, .tile .chip .state-b { animation: badge-a 8s linear infinite; }
+  .tile .chip .state-b { animation-name: badge-b; }
+  .tile .chip .badge-slot { display: inline-grid; }
+  .tile .chip .badge-slot > * { grid-area: 1 / 1; justify-self: start; }
+  .tile .chip-2 { bottom: 70px; left: 32px; animation-name: chip-late; }
+
+  /* Décalage des cycles : jamais deux cartes qui apparaissent en même temps */
+  .tile:nth-child(2) .chip, .tile:nth-child(2) .chip * { animation-delay: -2.5s; }
+  .tile:nth-child(4) .chip, .tile:nth-child(4) .chip * { animation-delay: -5s; }
+  .tile:nth-child(5) .chip, .tile:nth-child(5) .chip * { animation-delay: -1.2s; }
+  .tile:nth-child(6) .chip, .tile:nth-child(6) .chip * { animation-delay: -3.7s; }
+  .tile:nth-child(7) .chip, .tile:nth-child(7) .chip * { animation-delay: -6.2s; }
+
+  .tile-dark .tile-frame { background: #0b0b0b; isolation: isolate; }
+  .tile-ring { position: absolute; inset: -50%; z-index: 0; background: conic-gradient(from 0deg, transparent 0 70%, var(--emerald) 86%, transparent 100%); animation: spin 3s linear infinite; }
+  .tile-dark .tile-frame::before { content: ''; position: absolute; inset: 2px; z-index: 1; border-radius: inherit; background: #0b0b0b; }
+  .tile-dark .tile-body { position: absolute; inset: 0; z-index: 2; padding: 28px; display: flex; flex-direction: column; justify-content: flex-end; gap: 12px; color: #fff; }
+  .prio { display: flex; gap: 10px; align-items: center; font-size: 0.875rem; color: #d4d4d4; opacity: 0; animation: prio 8s var(--ease-premium) infinite; }
+  .prio:nth-child(2) { animation-delay: 0.4s; }
+  .prio:nth-child(3) { animation-delay: 0.8s; }
+  .prio i { width: 8px; height: 8px; border-radius: 999px; flex: none; }
+
+  /* --- Révélations : toujours visibles sans JavaScript --------------------- */
+  .js .reveal { opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--ease-premium), transform 600ms var(--ease-premium); }
+  .js .reveal.is-in { opacity: 1; transform: none; }
+
+  /* --- Gabarit des sections encore à construire --------------------------- */
+  .todo { border: 1px dashed #d4d4d4; border-radius: var(--radius-card); padding: 20px; color: var(--muted); font-size: 0.9375rem; }
+}
+
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.08) translate(-1.5%, -1%); } }
+@keyframes chip-life {
+  0%, 34% { opacity: 0; transform: translateY(6px) scale(0.96); }
+  40%, 92% { opacity: 1; transform: none; }
+  98%, 100% { opacity: 0; transform: translateY(6px) scale(0.96); }
+}
+@keyframes chip-late {
+  0%, 52% { opacity: 0; transform: translateY(6px) scale(0.96); }
+  58%, 92% { opacity: 1; transform: none; }
+  98%, 100% { opacity: 0; transform: translateY(6px) scale(0.96); }
+}
+@keyframes badge-a { 0%, 64% { opacity: 1; } 67%, 100% { opacity: 0; } }
+@keyframes badge-b { 0%, 64% { opacity: 0; } 67%, 100% { opacity: 1; } }
+@keyframes prio { 0%, 12% { opacity: 0; transform: translateY(6px); } 20%, 90% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes spin { to { transform: rotate(1turn); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .tile-media, .tile-ring, .prio, .tile .chip, .tile .chip * { animation: none !important; }
+  .tile .chip, .prio { opacity: 1; transform: none; }
+  .tile .chip .state-a { opacity: 0; }
+  .tile .chip .state-b { opacity: 1; }
+  .tile .chip-2 { opacity: 1; }
+  .marquee { overflow-x: auto; pointer-events: auto; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ==========================================================================
+   Étape 2 — composants de la page
+   ========================================================================== */
+@layer components {
+  /* --- Carrousel : défilement manuel, aimanté, boutons ronds (jamais automatique) */
+  .carousel { position: relative; min-width: 0; max-width: 100%; }
+  /* Un enfant de grille garde sa largeur de contenu : sans ceci, le carrousel élargit la page. */
+  .grid > section, .grid > div, .tab-panel, .module-block > * { min-width: 0; }
+  .carousel-track {
+    display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    scrollbar-width: none; padding-bottom: 4px; overscroll-behavior-x: contain;
+  }
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-track > * { scroll-snap-align: start; flex: none; }
+  .carousel-controls { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+  .btn-round:disabled { opacity: 0.35; cursor: default; }
+  .btn-round svg { width: 18px; height: 18px; }
+
+  /* --- Carte métier : photo 4:5, titre blanc sur dégradé noir ------------------ */
+  .metier-card { position: relative; width: min(78vw, 300px); aspect-ratio: 4 / 5; border-radius: var(--radius-card); overflow: hidden; color: #fff; background: var(--soft); }
+  .metier-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: var(--photo-grade); transition: transform 600ms var(--ease-premium); }
+  .metier-card:hover img { transform: scale(1.04); }
+  .metier-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10, 10, 10, 0.72), rgba(10, 10, 10, 0) 55%); }
+  .metier-card .metier-body { position: absolute; left: 20px; right: 20px; bottom: 20px; z-index: 1; }
+  .metier-card b { display: block; font-size: 1.25rem; letter-spacing: -0.015em; }
+  .metier-card span { display: block; margin-top: 4px; font-size: 0.875rem; color: rgba(255, 255, 255, 0.82); }
+
+  /* --- Onglets : soulignement qui glisse, fondu croisé des panneaux (650 ms) -- */
+  .tabs { position: relative; display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { position: relative; padding: 12px 14px; font-size: 0.9375rem; font-weight: 500; color: var(--muted); white-space: nowrap; transition: color 180ms; }
+  .tab[aria-selected='true'] { color: var(--ink); }
+  .tab:hover { color: var(--ink); }
+  .tab-indicator { position: absolute; bottom: -1px; left: 0; height: 2px; background: var(--ink); border-radius: 2px; transition: transform 650ms var(--ease-tab), width 650ms var(--ease-tab); }
+  .tab-panels { display: grid; margin-top: 32px; }
+  .tab-panel { grid-area: 1 / 1; opacity: 0; transform: translateY(10px); visibility: hidden; transition: opacity 650ms var(--ease-tab), transform 650ms var(--ease-tab), visibility 0s 650ms; }
+  .tab-panel.is-active { opacity: 1; transform: none; visibility: visible; transition-delay: 0s; }
+
+  /* --- Bloc module : texte et visuel en alternance ---------------------------- */
+  .module-block { display: grid; gap: 32px; align-items: center; }
+  @media (min-width: 900px) { .module-block { grid-template-columns: 1fr 1.1fr; gap: 64px; } .module-block.is-reverse > :first-child { order: 2; } }
+  .module-visual { position: relative; aspect-ratio: 1 / 1; border-radius: var(--radius-card); overflow: hidden; background: var(--soft); }
+  .module-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: var(--photo-grade); }
+  .module-visual .chip { position: absolute; left: 20px; bottom: 20px; background: rgba(255, 255, 255, 0.86); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .module-visual .ui-card { position: absolute; right: 20px; top: 20px; width: min(62%, 300px); }
+  .badge-included { background: var(--soft); color: var(--ink); border: 1px solid var(--line); }
+  .check-list { display: grid; gap: 10px; margin-top: 20px; }
+  .check-list li { display: grid; grid-template-columns: 20px 1fr; gap: 10px; color: var(--text-2); }
+  .check-list li::before { content: ''; width: 18px; height: 18px; margin-top: 3px; border-radius: 999px; background: var(--emerald-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5.5 9.2l2.2 2.2 4.8-4.8' fill='none' stroke='%23047857' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat; }
+  .ai-line { display: flex; gap: 10px; align-items: flex-start; margin-top: 20px; padding: 12px 14px; border-radius: 12px; background: var(--soft); font-size: 0.875rem; color: var(--text-2); }
+  .ai-line b { color: var(--ink); }
+
+  /* --- Grille bento ------------------------------------------------------------ */
+  .bento { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .bento { grid-template-columns: repeat(6, 1fr); } .bento > .span-2 { grid-column: span 2; } .bento > .span-3 { grid-column: span 3; } .bento > .span-4 { grid-column: span 4; } }
+  .bento-card { display: flex; flex-direction: column; gap: 20px; padding: 24px; border-radius: var(--radius-card); background: var(--soft); min-height: 260px; overflow: hidden; }
+  .bento-card .ui-card { margin-top: auto; }
+
+  /* --- Extraits d'interface (famille 3 : l'interface seule) --------------------- */
+  .ui-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(23, 23, 23, 0.08); padding: 14px; font-size: 0.8125rem; }
+  .ui-head { display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px; }
+  .ui-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .ui-row:first-of-type { border-top: 0; }
+  .ui-muted { color: var(--muted); font-size: 0.75rem; }
+  .ui-amount { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .ui-dot { width: 8px; height: 8px; border-radius: 999px; flex: none; }
+
+  /* --- FAQ ------------------------------------------------------------------- */
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-item summary { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0; font-size: 1.0625rem; font-weight: 600; cursor: pointer; list-style: none; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: ''; width: 20px; height: 20px; flex: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 8l5 5 5-5' fill='none' stroke='%23171717' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center no-repeat; transition: transform 240ms var(--ease-premium); }
+  .faq-item[open] summary::after { transform: rotate(180deg); }
+  .faq-item p { margin: 0 0 20px; color: var(--text-2); max-width: 70ch; line-height: 1.6; }
+
+  /* --- Schéma de la boucle : les étapes s'allument une à une, une seule fois ---- */
+  .loop-svg { width: 100%; height: auto; max-width: 760px; margin-inline: auto; display: block; }
+  .loop-ring { fill: none; stroke: var(--line); stroke-width: 2; stroke-dasharray: 6 6; }
+  .loop-ring-on { fill: none; stroke: var(--emerald); stroke-width: 2; stroke-dasharray: 1200; stroke-dashoffset: 1200; transition: stroke-dashoffset 2400ms var(--ease-premium); }
+  .loop.is-on .loop-ring-on { stroke-dashoffset: 0; }
+  .loop-node rect { fill: #fff; stroke: var(--line); stroke-width: 1.5; transition: stroke 400ms, fill 400ms; }
+  .loop-node text { fill: var(--muted); transition: fill 400ms; }
+  .loop-node .t1 { font: 600 15px Inter, sans-serif; }
+  .loop-node .t2 { font: 400 12px Inter, sans-serif; }
+  .loop.is-on .loop-node rect { stroke: var(--ink); }
+  .loop.is-on .loop-node text { fill: var(--ink); }
+  .loop.is-on .loop-node .t2 { fill: var(--text-2); }
+  .loop.is-on .loop-node.you rect { fill: var(--ink); }
+  .loop.is-on .loop-node.you text { fill: #fff; }
+  .loop-node { transition-delay: calc(var(--i) * 300ms); }
+  .loop-node rect, .loop-node text { transition-delay: inherit; }
+  .loop-center { font: 700 22px Inter, sans-serif; fill: var(--ink); }
+  .loop-center2 { font: 500 13px Inter, sans-serif; fill: var(--muted); }
+  .kpi-num { font-size: 2.25rem; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+
+  /* --- Footer ------------------------------------------------------------------ */
+  .footer-col { display: grid; align-content: start; gap: 10px; font-size: 0.875rem; }
+  .footer-col b { font-size: 0.875rem; margin-bottom: 4px; }
+  .footer-col a { color: var(--text-2); transition: color 180ms; }
+  .footer-col a:hover { color: var(--ink); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel, .tab-indicator, .loop-ring-on, .loop-node rect, .loop-node text, .metier-card img { transition: none !important; }
+}
+
+/* ==========================================================================
+   Étape 3 — sections de la page d'accueil
+   ========================================================================== */
+@layer components {
+  /* La boucle sur mobile : liste verticale, l'étape « Vous validez » en noir */
+  .loop-list { display: grid; gap: 10px; }
+  .loop-list li { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; padding: 14px 16px; border-radius: 14px; background: #fff; border: 1px solid var(--line); }
+  .loop-list li b { display: block; font-size: 1rem; }
+  .loop-list li span span { display: block; margin-top: 2px; font-size: 0.875rem; color: var(--text-2); }
+  .loop-list .loop-num { width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center; font-weight: 700; font-size: 0.875rem; background: var(--emerald-bg); color: var(--emerald-text); }
+  .loop-list li.you { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .loop-list li.you span span { color: #d4d4d4; }
+  .loop-list li.you .loop-num { background: #fff; color: var(--ink); }
+
+  /* Tarifs */
+  .billing { display: inline-flex; padding: 4px; border-radius: 10px; background: #fff; border: 1px solid var(--line); }
+  .billing button { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 8px; font-size: 0.875rem; font-weight: 500; color: var(--muted); transition: background-color 180ms, color 180ms; }
+  .billing button[aria-pressed='true'] { background: var(--ink); color: #fff; }
+  .billing button[aria-pressed='true'] .badge { background: rgba(255, 255, 255, 0.16); color: #fff; }
+  .price-card { position: relative; display: flex; flex-direction: column; padding: 24px; border-radius: var(--radius-card); background: #fff; border: 1px solid var(--line); }
+  .price-card > b, .price-card > .price-who { display: block; }
+  .price-card-dark { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .price-popular { position: absolute; top: -12px; left: 20px; padding: 4px 10px; border-radius: 999px; background: var(--emerald-text); color: #fff; font-size: 0.75rem; font-weight: 600; }
+  .price-who { font-size: 0.875rem; color: var(--muted); margin-top: 2px; }
+  .price-card-dark .price-who, .price-card-dark .price-note, .price-card-dark .price-desc, .price-card-dark .price-per { color: #a3a3a3; }
+  .price-num { font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .price-per { font-size: 0.875rem; color: var(--muted); }
+  .price-note { margin-top: 4px; font-size: 0.75rem; color: var(--emerald-text); min-height: 1.1em; }
+  .price-card-dark .price-note { color: #6ee7b7; }
+  .price-desc { margin-top: 16px; font-size: 0.875rem; color: var(--text-2); line-height: 1.55; min-height: 4.6em; }
+  .price-feats { margin-top: 24px; font-size: 0.875rem; }
+  .price-card-dark .check-list li { color: #d4d4d4; }
+}
+
+/* ==========================================================================
+   Tarifs en deux couches : opérations et boucle IA, avec infobulles ✦
+   ========================================================================== */
+@layer components {
+  .pricing-layers { font-size: 0.9375rem; color: var(--text-2); max-width: 70ch; line-height: 1.9; }
+  .price-layer { margin-top: 24px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .price-card-dark .price-layer { color: #a3a3a3; }
+  .price-card .price-feats { margin-top: 10px; }
+  .price-loop { margin-top: 20px; padding: 14px; border-radius: 12px; background: var(--emerald-bg); }
+  .price-card-dark .price-loop { background: rgba(16, 185, 129, 0.14); }
+  .price-loop .price-layer { margin-top: 0; }
+  .price-layer-ai { color: var(--emerald-text) !important; }
+  .price-card-dark .price-layer-ai { color: #6ee7b7 !important; }
+  .price-loop-plus { margin-top: 4px; font-size: 0.75rem; color: var(--text-2); }
+  .price-card-dark .price-loop-plus { color: #d4d4d4; }
+  .price-loop-list { display: grid; gap: 6px; margin-top: 8px; font-size: 0.875rem; font-weight: 500; }
+  .price-loop-list li, .price-feats li { position: relative; }
+  .price-loop-list li { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .price-feats li { grid-template-columns: 20px 1fr auto; }
+
+  /* Infobulle « ✦ » : ce que fait l'IA, et comment. Survol, focus clavier ou appui. */
+  .ai-tip { position: relative; display: inline-flex; flex: none; margin-left: 6px; vertical-align: middle; }
+  .ai-tip-btn { width: 20px; height: 20px; border-radius: 999px; display: grid; place-items: center; color: var(--emerald-text); background: #fff; border: 1px solid var(--line); cursor: help; transition: background-color 180ms, color 180ms; }
+  .ai-tip-btn svg { width: 11px; height: 11px; }
+  .ai-tip-btn:hover, .ai-tip.is-open .ai-tip-btn { background: var(--emerald); color: #fff; border-color: var(--emerald); }
+  .ai-tip-bubble {
+    position: absolute; z-index: 30; right: -6px; bottom: calc(100% + 8px); width: min(260px, 72vw);
+    padding: 10px 12px; border-radius: 10px; background: var(--ink); color: #fff; font-size: 0.8125rem; font-weight: 400; line-height: 1.45; text-align: left; text-transform: none; letter-spacing: 0;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); opacity: 0; transform: translateY(4px); pointer-events: none; transition: opacity 180ms var(--ease-premium), transform 180ms var(--ease-premium);
+  }
+  .ai-tip-bubble::after { content: ''; position: absolute; right: 12px; top: 100%; border: 6px solid transparent; border-top-color: var(--ink); }
+  .ai-tip:hover .ai-tip-bubble, .ai-tip:focus-within .ai-tip-bubble, .ai-tip.is-open .ai-tip-bubble { opacity: 1; transform: none; }
+  .price-card-dark .ai-tip-btn { background: transparent; border-color: rgba(255, 255, 255, 0.25); color: #6ee7b7; }
+  .price-card-dark .ai-tip-bubble { background: #fff; color: var(--ink); }
+  .price-card-dark .ai-tip-bubble::after { border-top-color: #fff; }
+
+  /* Tableau comparatif */
+  .cmp-label { display: inline-flex; align-items: center; }
+  .cmp-label .ai-tip-bubble { right: auto; left: -6px; }
+  .cmp-label .ai-tip-bubble::after { right: auto; left: 12px; }
+  .cmp-group { text-align: left; padding: 28px 0 8px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .cmp-group-ai { color: var(--emerald-text); }
+}
+@layer components { .ai-tip-bubble.is-fixed::after { display: none; } }
+
+/* Thaï : Inter n'a pas de glyphes thaïs ; crénage serré neutralisé, interlignes desserrés (règle du site actuel) */
+@layer components {
+  .lang-th, .lang-th * { font-family: 'Inter', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .lang-th .t-display, .lang-th .t-h2, .lang-th .t-h3, .lang-th h1, .lang-th h2, .lang-th h3 { letter-spacing: 0; line-height: 1.35; }
+  .lang-th .t-body, .lang-th p, .lang-th li { line-height: 1.75; }
+  .lang-th .t-label { letter-spacing: 0.02em; }
+}
