@@ -43,7 +43,44 @@ function head(lang, page, html) {
     desc ? `    <meta property="og:description" content="${desc}" />` : '',
     `    <meta property="og:url" content="${url(lang, page)}" />`,
     `    <meta property="og:locale" content="${lang.og}" />`,
+    // Image produite par v2/build_og.py, une par langue
+    `    <meta property="og:image" content="${SITE}assets/og-v2-${lang.code}.png" />`,
+    '    <meta property="og:image:width" content="1200" />',
+    '    <meta property="og:image:height" content="630" />',
+    `    <meta property="og:image:alt" content="${title}" />`,
+    '    <meta name="twitter:card" content="summary_large_image" />',
+    `    <meta name="twitter:image" content="${SITE}assets/og-v2-${lang.code}.png" />`,
+    `    <script type="application/ld+json">${JSON.stringify(jsonld(lang, page, desc))}</script>`,
   ].filter(Boolean).join('\n');
+}
+
+// Données structurées : organisation et site partout ; le logiciel et ses
+// formules (prix publics de la grille) sur l'accueil et la page Tarifs.
+const PLANS = [['Indépendant', 79, 99], ['Équipe', 279, 349], ['Croissance', 599, 749]];
+function jsonld(lang, page, desc) {
+  const graph = [
+    { '@type': 'Organization', '@id': `${SITE}#organization`, name: 'SAKSAE', url: SITE,
+      logo: { '@type': 'ImageObject', url: `${SITE}assets/logo-saksae.png`, width: 555, height: 450 } },
+    { '@type': 'WebSite', '@id': `${SITE}#website`, url: SITE, name: 'SAKSAE', inLanguage: lang.code, publisher: { '@id': `${SITE}#organization` } },
+  ];
+  if (page === 'index.html' || page === 'tarifs.html') {
+    graph.push({
+      '@type': 'SoftwareApplication', '@id': `${SITE}#software`, name: 'SAKSAE', applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web', url: url(lang, page), inLanguage: lang.code, publisher: { '@id': `${SITE}#organization` },
+      description: desc || undefined,
+      offers: {
+        '@type': 'AggregateOffer', priceCurrency: 'EUR', lowPrice: '79', highPrice: '749', offerCount: PLANS.length,
+        offers: PLANS.map(([name, annual, monthly]) => ({
+          '@type': 'Offer', name, priceCurrency: 'EUR', price: String(annual), url: url(lang, 'tarifs.html'),
+          priceSpecification: [
+            { '@type': 'UnitPriceSpecification', price: String(annual), priceCurrency: 'EUR', unitText: 'MON', billingDuration: 12 },
+            { '@type': 'UnitPriceSpecification', price: String(monthly), priceCurrency: 'EUR', unitText: 'MON', billingDuration: 1 },
+          ],
+        })),
+      },
+    });
+  }
+  return { '@context': 'https://schema.org', '@graph': graph };
 }
 
 function publish(lang, page, html) {

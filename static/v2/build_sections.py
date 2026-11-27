@@ -287,12 +287,13 @@ s_conf = f'''<section id="confidentialite" class="py-20 md:py-28">
 </section>'''
 
 # ---------- 13. FAQ ----------
-faq = [('J’utilise déjà Axonaut. Pourquoi changer ?', 'Gardez-le pour la banque si vous le souhaitez. SAKSAE s’occupe de votre journée : vos réunions, votre équipe et vos priorités. Et à partir de 5 personnes, un prix par équipe revient souvent moins cher qu’un prix par utilisateur.'),
-       ('L’IA agit-elle sans moi ?', 'Non. SAKSAE propose, vous validez. Aucun e-mail, aucune relance et aucune tâche ne part sans votre clic.'),
+faq = [('Qui voit quoi dans SAKSAE ?', 'Chacun a un rôle, avec des droits réglés module par module et action par action. Un commercial voit ses affaires, un responsable RH les dossiers du personnel, et vous gardez la vue d’ensemble.'),
+       ('Combien d’utilisateurs puis-je inviter ?', 'Selon votre formule : 1 en Indépendant, jusqu’à 9 en Équipe, jusqu’à 20 en Croissance, au-delà sur devis. Le prix est fixe pour la tranche : un collègue de plus dans la tranche ne coûte rien. Vous ajoutez ou retirez un accès à tout moment.'),
+       ('Mes données sont-elles protégées ?', 'Chaque utilisateur a son propre accès et ne voit que ce que son rôle autorise. Les salaires et les données RH sont masqués aux autres. Une réunion n’est enregistrée qu’avec l’accord de chaque participant.'),
+       ('L’IA agit-elle sans moi ?', 'Non. SAKSAE propose, vous validez. Aucun e-mail, aucune relance et aucune tâche ne part sans votre clic. Et l’IA respecte les mêmes droits : elle ne s’appuie que sur ce que votre rôle vous permet de voir.'),
        ('Que voit mon comptable ?', 'Les ventes, les achats et, si vous l’activez, la paie du mois. Jamais vos clients, vos réunions ni vos données RH. Son accès est gratuit.'),
        ('Y a-t-il un engagement ?', 'Le paiement au mois est sans engagement. Le paiement à l’année coûte 20 % de moins.'),
-       ('Comment démarrer ?', 'Créez votre compte, importez vos clients depuis un fichier Excel ou CSV et connectez votre messagerie. Un parcours guidé vous accompagne.'),
-       ('Mes données sont-elles protégées ?', 'Chaque personne ne voit que ce que son rôle autorise, les données sensibles comme les salaires sont masquées, et une réunion n’est enregistrée qu’avec l’accord de chaque participant.')]
+       ('Comment démarrer ?', 'Créez votre compte, importez vos clients depuis un fichier Excel ou CSV et connectez votre messagerie. Un parcours guidé vous accompagne.')]
 faq_html = ''.join(f'<details class="faq-item"{" open" if i == 0 else ""}><summary>{q}</summary><p>{a}</p></details>' for i, (q, a) in enumerate(faq))
 s_faq = f'''<section id="faq" class="py-20 md:py-28 border-t border-line">
   <div class="max-w-[1200px] mx-auto px-4 md:px-6 grid lg:grid-cols-[1fr_1.6fr] gap-10">
