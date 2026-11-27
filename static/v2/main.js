@@ -116,6 +116,11 @@
       indicator.style.width = `${tab.offsetWidth}px`;
       indicator.style.transform = `translateX(${tab.offsetLeft}px)`;
       if (focus) tab.focus();
+      // Avec 8 onglets, la liste défile sur mobile : on garde l'onglet choisi visible
+      const list = tab.parentElement;
+      if (list.scrollWidth > list.clientWidth) {
+        list.scrollTo({ left: tab.offsetLeft - (list.clientWidth - tab.offsetWidth) / 2, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }
     };
     tabs.forEach((t, i) => {
       t.addEventListener('click', () => select(t));

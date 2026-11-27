@@ -28,6 +28,11 @@ for (const lang of LANGS) {
     if (!html.includes('rel="canonical"')) problems.push('canonique absente');
     if ((html.match(/hreflang="/g) || []).length < LANGS.length + 1) problems.push('hreflang incomplets');
     if (html.includes('images.unsplash.com')) problems.push('photo encore servie par Unsplash');
+    const og = (html.match(/property="og:image" content="https:\/\/saksae\.com\/([^"]+)"/) || [])[1];
+    if (!og || !existsSync(join(docs, og))) problems.push('image d’aperçu absente');
+    const ld = (html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s) || [])[1];
+    try { if (!ld || !JSON.parse(ld)['@graph']) problems.push('données structurées absentes'); } catch { problems.push('données structurées illisibles'); }
+    if (/href="#"/.test(html)) problems.push('lien vide href="#"');
     if ((html.match(/<h1[\s>]/g) || []).length !== 1) problems.push('un seul h1 attendu');
     // chaque lien et ressource relatifs doivent exister dans docs/
     const refs = [...html.matchAll(/(?:href|src)="(\.{1,2}\/[^"#?]*)/g)].map((m) => m[1]);
