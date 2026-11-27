@@ -130,12 +130,35 @@
     addEventListener('resize', () => select(tabs.find((t) => t.getAttribute('aria-selected') === 'true')));
   });
 
-  // --- La boucle : s'allume une seule fois quand le schéma entre à l'écran
-  const loopIo = new IntersectionObserver(
-    (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-on'); loopIo.unobserve(e.target); } }),
-    { threshold: 0.35 },
-  );
-  document.querySelectorAll('.loop').forEach((el) => (reduce ? el.classList.add('is-on') : loopIo.observe(el)));
+  // --- La boucle IA : les sources arrivent, puis « Valider » crée la tâche.
+  // À l'arrivée à l'écran, la première action se valide seule pour montrer l'effet.
+  document.querySelectorAll('[data-l3]').forEach((root) => {
+    const counter = root.querySelector('[data-l3-count]');
+    const refresh = () => { counter.textContent = root.querySelectorAll('.l3-list li.is-done').length; };
+    root.addEventListener('click', (e) => {
+      const ok = e.target.closest('.l3-ok');
+      if (ok) {
+        const li = ok.closest('li');
+        li.classList.add('is-done');
+        ok.textContent = '✓';
+        ok.setAttribute('aria-label', li.querySelector('.l3-done').textContent);
+        refresh();
+        return;
+      }
+      const role = e.target.closest('[data-role]');
+      if (role) {
+        root.querySelectorAll('[data-role]').forEach((b) => b.setAttribute('aria-pressed', String(b === role)));
+        root.querySelectorAll('[data-role-list]').forEach((l) => l.classList.toggle('is-active', l.dataset.roleList === role.dataset.role));
+      }
+    });
+    const seen = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      root.classList.add('is-run');
+      seen.disconnect();
+      setTimeout(() => root.querySelector('.l3-list.is-active .l3-ok')?.click(), reduce ? 0 : 1800);
+    }), { threshold: 0.35 });
+    seen.observe(root);
+  });
 
   // --- Tarifs : bascule mensuel / annuel (annuel par défaut, -20 %)
   const billing = document.querySelector('.billing');
