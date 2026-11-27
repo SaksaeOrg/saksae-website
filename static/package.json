@@ -2,13 +2,18 @@
   "name": "saksae-static",
   "version": "1.0.0",
   "private": true,
-  "description": "SAKSAE marketing site \u2014 static HTML/CSS/JS, Tailwind as the only build step.",
+  "description": "SAKSAE marketing site — static HTML/CSS/JS, Tailwind as the only build step.",
   "scripts": {
     "build": "tailwindcss -i ./src/input.css -o ./css/styles.css --minify",
     "dev": "tailwindcss -i ./src/input.css -o ./css/styles.css --watch",
-    "serve": "python3 -m http.server 8080",
-    "deploy": "npm run build && npm run check && node deploy.mjs",
-    "check": "node check.mjs"
+    "serve": "node v2/serve.mjs",
+    "deploy": "npm run build:v2 && node deploy-v2.mjs && node check-v2.mjs",
+    "check": "node check-v2.mjs",
+    "dev:v2": "tailwindcss -c tailwind.v2.config.js -i ./src/v2.css -o ./css/v2.css --watch",
+    "build:v2": "tailwindcss -c tailwind.v2.config.js -i ./src/v2.css -o ./css/v2.css --minify",
+    "deploy:v1": "npm run build && npm run check && node deploy.mjs",
+    "check:v1": "node check.mjs",
+    "i18n": "python3 -I v2/i18n.py extract && python3 -I v2/i18n.py build"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.19"

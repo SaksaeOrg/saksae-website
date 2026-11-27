@@ -1,727 +1,216 @@
-/* SAKSAE — static site behaviour. No framework, no build step beyond Tailwind. */
-(function () {
-  'use strict';
+// Refonte 2027 : comportement de la v2 (header, méga-menus, bandeau du hero,
+// révélations). Sans framework, comme le site actuel.
+(() => {
+  document.documentElement.classList.add('js');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  document.documentElement.classList.add('js-on');
-
-  var DYN_LANGS = ['fr', 'en', 'vi', 'th'];
-
-  // Les versions linguistiques sont générées au build : la page qu'on
-  // sert est déjà dans la bonne langue. Il ne reste au runtime que les
-  // chaînes composées (compteurs, prix, totaux), que le DOM ne peut pas porter.
-  var lang = DYN_LANGS.indexOf(document.documentElement.lang) >= 0
-    ? document.documentElement.lang
-    : 'fr';
-
-  var $ = function (sel, root) {
-    return (root || document).querySelector(sel);
+  // --- Header : fond blanc après 40 px, caché en descendant, revient en remontant
+  const header = document.querySelector('.site-header');
+  let lastY = scrollY;
+  const onScroll = () => {
+    if (!header) return;
+    const y = scrollY;
+    header.classList.toggle('is-solid', y > 40);
+    const menuOpen = document.querySelector('.mega.is-open') || document.body.classList.contains('menu-open');
+    header.classList.toggle('is-hidden', !menuOpen && y > 240 && y > lastY);
+    lastY = y;
   };
-  var $$ = function (sel, root) {
-    return Array.prototype.slice.call((root || document).querySelectorAll(sel));
-  };
-  var reflow = function (el) {
-    return el.offsetHeight;
-  };
-  var swapClasses = function (el, remove, add) {
-    if (remove) el.classList.remove.apply(el.classList, remove.split(' '));
-    if (add) el.classList.add.apply(el.classList, add.split(' '));
-  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
-  /* ====================================================================
-     Chaînes composées à l'exécution
-     ==================================================================== */
-
-  var DYN = {
-    fr: {
-      greeting: "Bonjour Christophe, voici vos actions prioritaires pour aujourd'hui.",
-      stepCounter: function (n, total) {
-        return 'Étape ' + n + ' sur ' + total;
-      },
-      instead: function (price) {
-        return 'Au lieu de €' + price + '/mois';
-      },
-      entMonthly: 'dès 1 200',
-      entAnnual: 'Sur devis',
-      perUser: 'mois/utilisateur',
-      perMonth: 'mois',
-      perYear: 'an par utilisateur',
-    },
-    en: {
-      greeting: 'Hello Christophe, here are your priority actions for today.',
-      stepCounter: function (n, total) {
-        return 'Step ' + n + ' of ' + total;
-      },
-      instead: function (price) {
-        return 'Instead of €' + price + '/mo';
-      },
-      entMonthly: 'from 1,200',
-      entAnnual: 'Custom',
-      perUser: 'mo/user',
-      perMonth: 'mo',
-      perYear: 'year per user',
-    },
-    vi: {
-      greeting: 'Chào Christophe, đây là những việc ưu tiên của bạn hôm nay.',
-      stepCounter: function (n, total) {
-        return 'Bước ' + n + ' / ' + total;
-      },
-      instead: function (price) {
-        return 'Thay vì €' + price + '/tháng';
-      },
-      entMonthly: 'từ 1.200',
-      entAnnual: 'Theo báo giá',
-      perUser: 'tháng/người dùng',
-      perMonth: 'tháng',
-      perYear: 'năm mỗi người dùng',
-    },
-    th: {
-      greeting: 'สวัสดี Christophe นี่คือสิ่งที่ควรลงมือทำก่อนสำหรับวันนี้',
-      stepCounter: function (n, total) {
-        return 'ขั้นที่ ' + n + ' จาก ' + total;
-      },
-      instead: function (price) {
-        return 'จากเดิม €' + price + '/เดือน';
-      },
-      entMonthly: 'เริ่มต้น 1,200',
-      entAnnual: 'ตามใบเสนอราคา',
-      perUser: 'เดือน/ผู้ใช้',
-      perMonth: 'เดือน',
-      perYear: 'ปี ต่อผู้ใช้',
-    },
-  };
-
-  function t() {
-    return DYN[lang];
-  }
-
-  /* ====================================================================
-     Scroll reveals — replaces framer-motion whileInView
-     ==================================================================== */
-
-  function initReveals() {
-    var items = $$('.reveal');
-    if (!('IntersectionObserver' in window)) {
-      items.forEach(function (el) {
-        el.classList.add('is-visible');
-      });
-      return;
-    }
-    var io = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        });
-      },
-      { rootMargin: '0px 0px -60px 0px', threshold: 0 }
-    );
-    items.forEach(function (el) {
-      io.observe(el);
+  // --- Méga-menus : ouverture au clic et au survol (desktop), Échap pour fermer
+  const triggers = [...document.querySelectorAll('[data-mega]')];
+  const closeAll = (except) => {
+    triggers.forEach((t) => {
+      if (t === except) return;
+      t.setAttribute('aria-expanded', 'false');
+      document.getElementById(t.dataset.mega).classList.remove('is-open');
     });
-  }
+  };
+  const open = (t) => {
+    closeAll(t);
+    t.setAttribute('aria-expanded', 'true');
+    document.getElementById(t.dataset.mega).classList.add('is-open');
+    header?.classList.add('is-solid');
+  };
+  let hoverTimer;
+  triggers.forEach((t) => {
+    const panel = document.getElementById(t.dataset.mega);
+    t.addEventListener('click', () => (t.getAttribute('aria-expanded') === 'true' ? closeAll() : open(t)));
+    const enter = () => { clearTimeout(hoverTimer); if (matchMedia('(hover: hover)').matches) open(t); };
+    const leave = () => { hoverTimer = setTimeout(() => closeAll(), 160); };
+    t.addEventListener('mouseenter', enter);
+    t.addEventListener('mouseleave', leave);
+    panel.addEventListener('mouseenter', () => clearTimeout(hoverTimer));
+    panel.addEventListener('mouseleave', leave);
+  });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAll(); toggleMobile(false); } });
+  document.addEventListener('click', (e) => { if (!e.target.closest('[data-mega], .mega')) closeAll(); });
 
-  /* ====================================================================
-     Panels — replaces <AnimatePresence mode="wait">
-     ==================================================================== */
+  // --- Menu mobile plein écran
+  const burger = document.querySelector('[data-burger]');
+  const mobile = document.getElementById('menu-mobile');
+  const toggleMobile = (force) => {
+    if (!mobile) return;
+    const on = force ?? mobile.hidden;
+    mobile.hidden = !on;
+    burger.setAttribute('aria-expanded', String(on));
+    document.body.classList.toggle('menu-open', on);
+    document.body.style.overflow = on ? 'hidden' : '';
+  };
+  burger?.addEventListener('click', () => toggleMobile());
+  mobile?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => toggleMobile(false)));
 
-  function activatePanel(panel) {
-    panel.classList.remove('is-active');
-    reflow(panel);
-    panel.classList.add('is-active');
-    $$('.stagger', panel).forEach(function (group) {
-      group.classList.remove('is-playing');
-      reflow(group);
-      group.classList.add('is-playing');
-    });
-    if (panel.classList.contains('stagger')) {
-      panel.classList.remove('is-playing');
-      reflow(panel);
-      panel.classList.add('is-playing');
-    }
-  }
-
-  function showPanel(container, key, duration) {
-    var current = $('.panel:not([hidden])', container);
-    var next = container.querySelector('.panel[data-panel="' + key + '"]');
-    if (!next || current === next) return;
-
-    var enter = function () {
-      next.classList.add('is-entering');
-      next.hidden = false;
-      reflow(next);
-      next.classList.remove('is-entering');
-      activatePanel(next);
+  // --- Bandeau du hero : défilement continu, tuiles recyclées (≈ 50 px/s)
+  const track = document.querySelector('.marquee-track');
+  if (track && !reduce) {
+    let x = 0;
+    let last = performance.now();
+    const step = (now) => {
+      const speed = innerWidth < 768 ? 30 : 50;
+      const dt = Math.min(now - last, 64);
+      last = now;
+      if (!document.hidden) {
+        x -= (speed * dt) / 1000;
+        const first = track.firstElementChild;
+        const w = first.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0);
+        if (-x >= w) { track.appendChild(first); x += w; }
+        track.style.transform = `translate3d(${x}px,0,0)`;
+      }
+      requestAnimationFrame(step);
     };
-
-    if (!current) {
-      enter();
-      return;
-    }
-    current.classList.add('is-leaving');
-    window.setTimeout(function () {
-      current.hidden = true;
-      current.classList.remove('is-leaving', 'is-active');
-      enter();
-    }, duration);
+    requestAnimationFrame(step);
   }
 
-  /** Play the initially-visible panel's animations when its group scrolls in. */
-  function initPanelGroups() {
-    var groups = $$('[data-panels]');
-    if (!('IntersectionObserver' in window)) {
-      groups.forEach(function (g) {
-        var p = $('.panel:not([hidden])', g);
-        if (p) activatePanel(p);
-      });
-      return;
-    }
-    var io = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          var panel = $('.panel:not([hidden])', entry.target);
-          if (panel) activatePanel(panel);
-          io.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.15 }
-    );
-    groups.forEach(function (g) {
-      io.observe(g);
-    });
-  }
-
-  /* ====================================================================
-     Tab bars — replaces framer-motion layoutId for the moving underline
-     ==================================================================== */
-
-  function positionUnderline(bar) {
-    var underline = $('[data-underline]', bar);
-    if (!underline) return;
-    var active = bar.querySelector('[data-tab][aria-selected="true"]');
-    if (!active) return;
-    var inset = Number(bar.getAttribute('data-underline-inset') || 0);
-    underline.style.transform = 'translateX(' + (active.offsetLeft + inset) + 'px)';
-    underline.style.width = Math.max(0, active.offsetWidth - inset * 2) + 'px';
-    underline.classList.add('is-ready');
-  }
-
-  function initTabs(name, config) {
-    var bar = $('[data-tabs="' + name + '"]');
-    var panels = $('[data-panels="' + name + '"]');
-    if (!bar) return null;
-
-    var select = function (key) {
-      $$('[data-tab]', bar).forEach(function (btn) {
-        var on = btn.getAttribute('data-tab') === key;
-        btn.setAttribute('aria-selected', String(on));
-        swapClasses(btn, on ? config.inactive : config.active, on ? config.active : config.inactive);
-      });
-      positionUnderline(bar);
-      if (panels) showPanel(panels, key, config.duration);
-      if (config.onSelect) config.onSelect(key);
+  // --- Carrousels : boutons Précédent / Suivant, désactivés aux extrémités
+  document.querySelectorAll('[data-carousel]').forEach((root) => {
+    const track = root.querySelector('.carousel-track');
+    const prev = root.querySelector('[data-prev]');
+    const next = root.querySelector('[data-next]');
+    const stepSize = () => {
+      const item = track.firstElementChild;
+      return item ? item.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0) : track.clientWidth;
     };
-
-    bar.addEventListener('click', function (event) {
-      var btn = event.target.closest('[data-tab]');
-      if (!btn || !bar.contains(btn)) return;
-      if (config.onInteract) config.onInteract();
-      select(btn.getAttribute('data-tab'));
-    });
-
-    window.addEventListener('resize', function () {
-      positionUnderline(bar);
-    });
-    positionUnderline(bar);
-
-    return { select: select, bar: bar };
-  }
-
-  /* ====================================================================
-     Header
-     ==================================================================== */
-
-  /**
-   * Les maquettes produit portent role="img" et un aria-label : elles doivent
-   * s'annoncer comme une seule illustration. La spec ARIA prévoit que role="img"
-   * rende ses descendants présentationnels, mais Chrome ne l'applique pas —
-   * vérifié : le contenu interne reste exposé. On masque donc explicitement les
-   * enfants, le libellé restant porté par le parent.
-   */
-  function hideDecorativeSubtrees() {
-    $$('[role="img"][data-i18n-label]').forEach(function (el) {
-      Array.prototype.forEach.call(el.children, function (child) {
-        child.setAttribute('aria-hidden', 'true');
-      });
-    });
-  }
-
-  function initHeader() {
-    var toggle = $('#mobile-menu-toggle');
-    var menu = $('#mobile-menu');
-    if (!toggle || !menu) return;
-
-    var setOpen = function (open) {
-      menu.hidden = !open;
-      toggle.setAttribute('aria-expanded', String(open));
-      $('[data-menu-open]', toggle).hidden = open;
-      $('[data-menu-close]', toggle).hidden = !open;
+    const update = () => {
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
     };
+    prev.addEventListener('click', () => track.scrollBy({ left: -stepSize(), behavior: reduce ? 'auto' : 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: stepSize(), behavior: reduce ? 'auto' : 'smooth' }));
+    track.addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+  });
 
-    toggle.addEventListener('click', function () {
-      setOpen(menu.hidden);
-    });
-    menu.addEventListener('click', function (event) {
-      if (event.target.closest('a')) setOpen(false);
-    });
-
-    // Le sélecteur de langue est un <details> : il s'ouvre sans JavaScript.
-    // Ici, seulement ce qu'un menu doit faire en plus — se refermer au clic
-    // extérieur et sur Échap, en rendant le focus au déclencheur.
-    $$('[data-lang-menu]').forEach(function (details) {
-      document.addEventListener('click', function (event) {
-        if (details.open && !details.contains(event.target)) details.open = false;
+  // --- Onglets : clic et flèches du clavier, soulignement qui suit l'onglet actif
+  document.querySelectorAll('[data-tabs]').forEach((root) => {
+    const tabs = [...root.querySelectorAll('[role="tab"]')];
+    const indicator = root.querySelector('.tab-indicator');
+    const select = (tab, focus) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).classList.toggle('is-active', on);
       });
-      details.addEventListener('keydown', function (event) {
-        if (event.key !== 'Escape' || !details.open) return;
-        details.open = false;
-        $('summary', details).focus();
+      indicator.style.width = `${tab.offsetWidth}px`;
+      indicator.style.transform = `translateX(${tab.offsetLeft}px)`;
+      if (focus) tab.focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        select(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length], true);
       });
     });
-  }
+    const current = tabs.find((t) => t.getAttribute('aria-selected') === 'true') || tabs[0];
+    select(current);
+    addEventListener('resize', () => select(tabs.find((t) => t.getAttribute('aria-selected') === 'true')));
+  });
 
-  /* ====================================================================
-     Hero — ambient action popups
-     ==================================================================== */
-
-  function initHeroPopups() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    $$('#hero-popups .hero-popup').forEach(function (el) {
-      var positions;
-      try {
-        positions = JSON.parse(el.getAttribute('data-positions'));
-      } catch (e) {
+  // --- La boucle IA : les sources arrivent, puis « Valider » crée la tâche.
+  // À l'arrivée à l'écran, la première action se valide seule pour montrer l'effet.
+  document.querySelectorAll('[data-l3]').forEach((root) => {
+    const counter = root.querySelector('[data-l3-count]');
+    const refresh = () => { counter.textContent = root.querySelectorAll('.l3-list li.is-done').length; };
+    root.addEventListener('click', (e) => {
+      const ok = e.target.closest('.l3-ok');
+      if (ok) {
+        const li = ok.closest('li');
+        li.classList.add('is-done');
+        ok.textContent = '✓';
+        ok.setAttribute('aria-label', li.querySelector('.l3-done').textContent);
+        refresh();
         return;
       }
-      var delay = parseFloat(el.getAttribute('data-delay')) || 0;
-      var index = 0;
-
-      var place = function () {
-        el.style.left = '';
-        el.style.right = '';
-        var pos = positions[index];
-        Object.keys(pos).forEach(function (prop) {
-          el.style[prop] = pos[prop];
-        });
-      };
-
-      var show = function () {
-        place();
-        el.classList.remove('is-out');
-        el.classList.add('is-in');
-        window.setTimeout(function () {
-          el.classList.remove('is-in');
-          el.classList.add('is-out');
-          window.setTimeout(function () {
-            el.classList.remove('is-out');
-            index = (index + 1) % positions.length;
-          }, 400);
-        }, 2800);
-      };
-
-      place();
-      window.setTimeout(function () {
-        show();
-        window.setInterval(show, (delay + 3.6) * 1000 + 3600);
-      }, delay * 1000);
+      const role = e.target.closest('[data-role]');
+      if (role) {
+        root.querySelectorAll('[data-role]').forEach((b) => b.setAttribute('aria-pressed', String(b === role)));
+        root.querySelectorAll('[data-role-list]').forEach((l) => l.classList.toggle('is-active', l.dataset.roleList === role.dataset.role));
+      }
     });
+    const seen = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      root.classList.add('is-run');
+      seen.disconnect();
+      setTimeout(() => root.querySelector('.l3-list.is-active .l3-ok')?.click(), reduce ? 0 : 1800);
+    }), { threshold: 0.35 });
+    seen.observe(root);
+  });
+
+  // --- Tarifs : bascule mensuel / annuel (annuel par défaut, -20 %)
+  const billing = document.querySelector('.billing');
+  if (billing) {
+    const setCycle = (annual) => {
+      billing.querySelectorAll('[data-billing]').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.billing === 'annual') === annual)));
+      document.querySelectorAll('.price-card[data-monthly]').forEach((card) => {
+        card.querySelector('[data-price]').textContent = (billing.dataset.tPrice || '{p} €').replace('{p}', annual ? card.dataset.annual : card.dataset.monthly);
+        card.querySelector('[data-saving]').textContent = annual ? billing.dataset.tAnnual.replace('{m}', card.dataset.monthly) : billing.dataset.tMonthly;
+        const link = card.querySelector('[data-signup-plan]');
+        if (link) link.href = `https://app.saksae.com/signup?plan=${card.dataset.plan}&cycle=${annual ? 'annual' : 'monthly'}`;
+      });
+    };
+    billing.addEventListener('click', (e) => { const b = e.target.closest('[data-billing]'); if (b) setCycle(b.dataset.billing === 'annual'); });
+    setCycle(true);
   }
 
-  /* ====================================================================
-     [01] Platform
-     ==================================================================== */
-
-  var PLATFORM_ACTIVE_ITEM = {
-    crm: 'clients',
-    services: 'missions',
-    produits: 'catalogue',
-    management: 'projets',
-    finance: 'facturation',
-    equipe: 'collaborateurs',
+  // --- Infobulles ✦ (rôle de l'IA) : placées par rapport à l'écran pour n'être
+  // jamais coupées par un tableau qui défile ; survol, clavier ou appui.
+  const tips = [...document.querySelectorAll('.ai-tip')];
+  const place = (tip) => {
+    const btn = tip.querySelector('.ai-tip-btn');
+    const bubble = tip.querySelector('.ai-tip-bubble');
+    const r = btn.getBoundingClientRect();
+    const w = Math.min(260, innerWidth * 0.72);
+    bubble.classList.add('is-fixed');
+    Object.assign(bubble.style, { position: 'fixed', width: `${w}px`, right: 'auto', bottom: 'auto' });
+    bubble.style.left = `${Math.min(Math.max(8, r.right - w + 6), innerWidth - w - 8)}px`;
+    const h = bubble.offsetHeight;
+    bubble.style.top = `${r.top - h - 8 < 8 ? r.bottom + 8 : r.top - h - 8}px`;
   };
-  var NAV_ON = 'bg-white text-[#0A0A0A] font-medium shadow-[0_0_0_1px_rgba(0,0,0,0.04)]';
-  var NAV_OFF = 'text-[#4B5563] hover:bg-white/60';
-
-  function initPlatform() {
-    initTabs('platform', {
-      active: 'text-[#0A0A0A] font-semibold',
-      inactive: 'text-[#6E6E77] hover:text-[#52525B]',
-      duration: 200,
-      onSelect: function (key) {
-        var wanted = PLATFORM_ACTIVE_ITEM[key];
-        $$('.platform-nav').forEach(function (item) {
-          var on = item.getAttribute('data-item') === wanted;
-          swapClasses(item, on ? NAV_OFF : NAV_ON, on ? NAV_ON : NAV_OFF);
-        });
-      },
+  tips.forEach((tip) => {
+    tip.addEventListener('mouseenter', () => place(tip));
+    tip.addEventListener('focusin', () => place(tip));
+    tip.querySelector('.ai-tip-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      const open = !tip.classList.contains('is-open');
+      tips.forEach((t) => t.classList.remove('is-open'));
+      if (open) { place(tip); tip.classList.add('is-open'); }
     });
-    // Paint the initial highlight without animating the panel.
-    var wanted = PLATFORM_ACTIVE_ITEM.crm;
-    $$('.platform-nav').forEach(function (item) {
-      var on = item.getAttribute('data-item') === wanted;
-      swapClasses(item, on ? NAV_OFF : NAV_ON, on ? NAV_ON : NAV_OFF);
-    });
+  });
+  if (tips.length) {
+    document.addEventListener('click', (e) => { if (!e.target.closest('.ai-tip')) tips.forEach((t) => t.classList.remove('is-open')); });
+    const refresh = () => tips.filter((t) => t.matches(':hover, :focus-within, .is-open')).forEach(place);
+    addEventListener('scroll', refresh, { passive: true });
+    document.querySelectorAll('.overflow-x-auto').forEach((el) => el.addEventListener('scroll', refresh, { passive: true }));
   }
 
-  /* ====================================================================
-     [02] Onboarding carousel
-     ==================================================================== */
-
-  var ONB_STEPS = 4;
-  var onbTimer = null;
-  var onbStep = 0;
-
-  function renderStepCounters() {
-    $$('[data-step-counter]').forEach(function (el) {
-      var panel = el.closest('.panel');
-      var index = panel ? Number(panel.getAttribute('data-panel')) : 0;
-      el.textContent = t().stepCounter(index + 1, ONB_STEPS);
-    });
-  }
-
-  function initOnboarding() {
-    var bar = $('[data-tabs="onb"]');
-    var panels = $('[data-panels="onb"]');
-    if (!bar || !panels) return;
-
-    var select = function (index) {
-      onbStep = index;
-      $$('[data-tab]', bar).forEach(function (btn) {
-        var on = Number(btn.getAttribute('data-tab')) === index;
-        btn.setAttribute('aria-selected', String(on));
-        if (btn.classList.contains('onb-bar')) {
-          swapClasses(btn, on ? 'bg-[#E5E7EB]' : 'bg-[#0A0A0A]', on ? 'bg-[#0A0A0A]' : 'bg-[#E5E7EB]');
-        } else {
-          swapClasses(
-            btn,
-            on ? 'text-[#6B7280]' : 'text-[#0A0A0A] font-medium',
-            on ? 'text-[#0A0A0A] font-medium' : 'text-[#6B7280]'
-          );
-        }
-      });
-      showPanel(panels, String(index), 300);
-    };
-
-    var start = function () {
-      window.clearInterval(onbTimer);
-      onbTimer = window.setInterval(function () {
-        select((onbStep + 1) % ONB_STEPS);
-      }, 3000);
-    };
-
-    bar.addEventListener('click', function (event) {
-      var btn = event.target.closest('[data-tab]');
-      if (!btn) return;
-      select(Number(btn.getAttribute('data-tab')));
-      start();
-    });
-
-    start();
-  }
-
-  /* ====================================================================
-     [03] AI tools
-     ==================================================================== */
-
-  function initTools() {
-    initTabs('tools', {
-      active: 'text-[#0A0A0A]',
-      inactive: 'text-[#6E6E77] hover:text-[#52525B]',
-      duration: 250,
-    });
-  }
-
-  /* ====================================================================
-     [04] AI — typing headline and expandable action cards
-     ==================================================================== */
-
-  var typeTimer = null;
-
-  function startTyping() {
-    var target = $('#ai-typed');
-    if (!target) return;
-    var text = t().greeting;
-    window.clearInterval(typeTimer);
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      target.textContent = text;
-      return;
-    }
-
-    var i = 0;
-    target.textContent = '';
-    typeTimer = window.setInterval(function () {
-      if (i < text.length) {
-        target.textContent = text.slice(0, ++i);
-      } else {
-        window.clearInterval(typeTimer);
-      }
-    }, 28);
-  }
-
-  function initCursor() {
-    var cursor = $('#ai-cursor');
-    if (!cursor) return;
-    window.setInterval(function () {
-      cursor.classList.toggle('opacity-0');
-    }, 530);
-  }
-
-  var CARD_OFF = 'border-[#E4E4E7] hover:border-[#D4D4D8]';
-  var CARD_ON_REV = 'border-[#059669]/30 shadow-[0_1px_8px_rgba(5,150,105,0.06)]';
-  var CARD_ON_OP = 'border-[#3B82F6]/30 shadow-[0_1px_8px_rgba(59,130,246,0.06)]';
-
-  function closeAccordion(btn) {
-    var panel = btn.parentElement.querySelector('[data-accordion-panel]');
-    btn.setAttribute('aria-expanded', 'false');
-    swapClasses(btn, btn.classList.contains('ai-card-op') ? CARD_ON_OP : CARD_ON_REV, CARD_OFF);
-    var chevron = $('[data-chevron]', btn);
-    if (chevron) chevron.classList.remove('rotate-180');
-    panel.style.height = panel.scrollHeight + 'px';
-    reflow(panel);
-    panel.style.height = '0px';
-    panel.style.opacity = '0';
-  }
-
-  function openAccordion(btn) {
-    var panel = btn.parentElement.querySelector('[data-accordion-panel]');
-    btn.setAttribute('aria-expanded', 'true');
-    swapClasses(btn, CARD_OFF, btn.classList.contains('ai-card-op') ? CARD_ON_OP : CARD_ON_REV);
-    var chevron = $('[data-chevron]', btn);
-    if (chevron) chevron.classList.add('rotate-180');
-    panel.style.height = panel.scrollHeight + 'px';
-    panel.style.opacity = '1';
-    panel.addEventListener('transitionend', function once(event) {
-      if (event.propertyName !== 'height') return;
-      panel.removeEventListener('transitionend', once);
-      if (btn.getAttribute('aria-expanded') === 'true') panel.style.height = 'auto';
-    });
-  }
-
-  function initAccordions() {
-    $$('[data-accordion]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var open = btn.getAttribute('aria-expanded') === 'true';
-        // Only one card open per group, matching the original single-index state.
-        var group = btn.closest('.space-y-2');
-        if (group) {
-          $$('[data-accordion][aria-expanded="true"]', group).forEach(function (other) {
-            if (other !== btn) closeAccordion(other);
-          });
-        }
-        if (open) closeAccordion(btn);
-        else openAccordion(btn);
-      });
-    });
-  }
-
-  /* ====================================================================
-     [05] Pricing
-     ==================================================================== */
-
-  var annual = true;
-  var BILL_ON = 'bg-white text-[#0A0A0A] shadow-[0_1px_2px_rgba(0,0,0,0.05)]';
-  var BILL_OFF = 'text-[#6E6E77] hover:text-[#52525B]';
-
-  function renderPricing() {
-    var toggle = $('#billing-toggle');
-    if (!toggle) return;
-
-    $$('[data-billing]', toggle).forEach(function (btn) {
-      var on = (btn.getAttribute('data-billing') === 'annual') === annual;
-      swapClasses(btn, on ? BILL_OFF : BILL_ON, on ? BILL_ON : BILL_OFF);
-    });
-
-    var note = $('#annual-note');
-    if (note) note.hidden = !annual;
-
-    $$('[data-plan]').forEach(function (card) {
-      var price = $('[data-price]', card);
-      var per = $('[data-per]', card);
-      var saving = $('[data-saving]', card);
-      var custom = card.hasAttribute('data-custom');
-
-      if (custom) {
-        price.textContent = annual ? t().entAnnual : t().entMonthly;
-        if (per) per.hidden = annual;
-      } else {
-        price.textContent = '€' + card.getAttribute(annual ? 'data-annual' : 'data-monthly');
-        if (per) per.hidden = false;
-        if (saving) {
-          saving.hidden = !annual;
-          saving.textContent = t().instead(card.getAttribute('data-monthly'));
-        }
-      }
-      if (per && !per.hidden) {
-        var unit = $('[data-i18n="pricing.mo"]', per);
-        if (unit) unit.textContent = t().perMonth;
-      }
-      var signup = $('[data-signup-plan]', card);
-      if (signup) {
-        signup.href = 'https://app.saksae.com/signup?plan=' + signup.getAttribute('data-signup-plan') +
-          '&cycle=' + (annual ? 'annual' : 'monthly');
-      }
-    });
-  }
-
-  function initPricing() {
-    var toggle = $('#billing-toggle');
-    if (!toggle) return;
-    toggle.addEventListener('click', function (event) {
-      var btn = event.target.closest('[data-billing]');
-      if (!btn) return;
-      annual = btn.getAttribute('data-billing') === 'annual';
-      renderPricing();
-    });
-    renderPricing();
-  }
-
-  /* ====================================================================
-     Savings calculator
-     ==================================================================== */
-
-  var MARKET_TOOLS = [
-    { name: 'Zoom', price: 15 },
-    { name: 'Otter.ai', price: 17 },
-    { name: 'Asana', price: 25 },
-    { name: 'Monday', price: 30 },
-    { name: 'Calendly', price: 12 },
-    { name: 'DocuSign', price: 25 },
-    { name: 'PandaDoc', price: 35 },
-    { name: 'Notion', price: 10 },
-  ];
-  // Formule Équipe, 5 utilisateurs, en annuel : 279 € / 5 ≈ 56 €.
-  // Slack et PayFit sont retirés : SAKSAE n'a ni messagerie d'équipe ni calcul de paie.
-  var SAKSAE_PRICE = 56;
-  var selectedTools = {};
-  var TOOL_ON = 'border-[#0A0A0A] bg-[#0A0A0A] text-white';
-  var TOOL_OFF = 'border-[#E5E7EB] hover:border-[#0A0A0A]';
-
-  function renderCalculator() {
-    var list = $('#calc-tools');
-    if (!list) return;
-
-    list.innerHTML = '';
-    MARKET_TOOLS.forEach(function (tool) {
-      var on = !!selectedTools[tool.name];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'p-3 rounded-lg border text-left transition-all ' + (on ? TOOL_ON : TOOL_OFF);
-      btn.setAttribute('aria-pressed', String(on));
-      btn.dataset.tool = tool.name;
-
-      var name = document.createElement('p');
-      name.className = 'text-sm font-medium';
-      name.textContent = tool.name;
-
-      var price = document.createElement('p');
-      price.className = 'text-xs ' + (on ? 'text-white/60' : 'text-[#6B7280]');
-      price.textContent = '€' + tool.price + '/' + t().perUser;
-
-      btn.appendChild(name);
-      btn.appendChild(price);
-      list.appendChild(btn);
-    });
-
-    var total = MARKET_TOOLS.reduce(function (sum, tool) {
-      return sum + (selectedTools[tool.name] ? tool.price : 0);
-    }, 0);
-    var monthly = Math.max(0, total - SAKSAE_PRICE);
-
-    $('#calc-current').textContent = '€' + total + '/' + t().perUser;
-    $('#calc-saksae').textContent = '€' + SAKSAE_PRICE + '/' + t().perUser;
-    $('#calc-monthly').textContent = '€' + monthly + '/' + t().perMonth;
-    $('#calc-yearly').textContent = '= €' + monthly * 12 + '/' + t().perYear;
-  }
-
-  function initCalculator() {
-    var modal = $('#calculator');
-    var open = $('#open-calculator');
-    var list = $('#calc-tools');
-    if (!modal || !open) return;
-
-    var lastFocus = null;
-
-    var setOpen = function (show) {
-      if (show) {
-        lastFocus = document.activeElement;
-        modal.hidden = false;
-        reflow(modal);
-        modal.classList.add('is-open');
-        document.body.style.overflow = 'hidden';
-        $('[data-close-calculator]', modal).focus();
-      } else {
-        modal.classList.remove('is-open');
-        document.body.style.overflow = '';
-        window.setTimeout(function () {
-          modal.hidden = true;
-        }, 200);
-        if (lastFocus) lastFocus.focus();
-      }
-    };
-
-    open.addEventListener('click', function () {
-      setOpen(true);
-    });
-    modal.addEventListener('click', function (event) {
-      if (event.target === modal || event.target.closest('[data-close-calculator]')) setOpen(false);
-    });
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape' && !modal.hidden) setOpen(false);
-    });
-    list.addEventListener('click', function (event) {
-      var btn = event.target.closest('[data-tool]');
-      if (!btn) return;
-      var name = btn.dataset.tool;
-      selectedTools[name] = !selectedTools[name];
-      renderCalculator();
-    });
-
-    renderCalculator();
-  }
-
-  /* ====================================================================
-     Boot
-     ==================================================================== */
-
-  function init() {
-    renderStepCounters();
-    renderPricing();
-    renderCalculator();
-    startTyping();
-
-    var year = $('#footer-year');
-    if (year) year.textContent = String(new Date().getFullYear());
-
-    hideDecorativeSubtrees();
-    initHeader();
-    initReveals();
-    initPanelGroups();
-    initHeroPopups();
-    initPlatform();
-    initOnboarding();
-    initTools();
-    initAccordions();
-    initCursor();
-    initPricing();
-    initCalculator();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  // --- Révélations au défilement, depuis un état toujours lisible sans JS
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }),
+    { rootMargin: '0px 0px -10% 0px' },
+  );
+  document.querySelectorAll('.reveal').forEach((el, i) => { el.style.transitionDelay = `${(i % 4) * 60}ms`; io.observe(el); });
 })();
